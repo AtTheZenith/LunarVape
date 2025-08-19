@@ -21,5 +21,8 @@ local registry = {
   ['8951451142'] = 'Skywars Eggwars',
 }
 
-registry.__index = function(...): boolean return false end
+registry.__index = function(...): boolean
+  return false
+end
 return registry
+

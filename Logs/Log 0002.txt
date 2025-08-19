@@ -1,9 +1,0 @@
-Lunar Vape Diagnostics Logging
-Roblox Username: lunarvaqe
-Executor Name: Velocity
-TouchEnabled: No
-HWID: E402B914FBBF713FA7AB771C580C3E
-Time: 2025-05-27 11:34:59.41316
-=========================================================================
-11:35:00.42481 [OUTPUT]: Lunar Vape error logging has started.
-11:35:00.42530 [OUTPUT]: Lunar Vape/Loader.lua

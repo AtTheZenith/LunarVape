@@ -18,7 +18,7 @@ local function downloadFile(path, func)
 		if res == '404: Not Found' or res == '' then
 			warn(string.format('Error while downloading file %s: %s', path, res)); return
 		elseif not suc then
-			error(string.format('Error while downloading file %s: %s', path, res)); return
+			warn(string.format('Error while downloading file %s: %s', path, res)); return
 		end
 		if path:find('.lua') then
 			res = '--This watermark is used to delete the file if its cached, remove it to make the file persist after Lunar Vape updates.\n'..res
@@ -33,7 +33,9 @@ if not isfolder(Dir) then makefolder(Dir) end
 
 local Files = loadstring(downloadFile(Dir .. '/Files.lua'))()
 if not isfolder('Lunar Vape/Profiles') then makefolder('Lunar Vape/Profiles') end
-for _, File in Files do
-  if isfile('Lunar Vape/Profiles/' .. File) then continue end
-  writefile('Lunar Vape/Profiles/' .. File, downloadFile(string.format('Lunar Vape/Extra/Profiles/%s/%s', registry[GAME_NAME], File)))
+if Files then
+	for _, File in Files do
+		if isfile('Lunar Vape/Profiles/' .. File) then continue end
+		writefile('Lunar Vape/Profiles/' .. File, downloadFile(string.format('Lunar Vape/Extra/Profiles/%s/%s', registry[GAME_NAME], File)))
+	end
 end

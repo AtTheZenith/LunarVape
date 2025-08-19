@@ -1269,62 +1269,62 @@ run(function()
   StrafeIncrease = AimAssist:CreateToggle({Name = 'Strafe increase'})
 end)
 
-run(function()
-	local old
-	local oldSwing
+-- run(function()
+-- 	local old
+-- 	local oldSwing
 	
-	AutoCharge = LunarVape.Categories.Combat:CreateModule({
-	    Name = 'AutoCharge',
-	    Function = function(callback)
-	        debug.setconstant(bedwars.SwordController.attackEntity, 58, callback and 'damage' or 'multiHitCheckDurationSec')
-	        if callback then
-              if LunarVape.Modules.Killaura and LunarVape.Modules.Killaura.Enabled then AutoCharge:Toggle(); return end
-	            local chargeSwingTime = 0
-	            local canSwing
+-- 	AutoCharge = LunarVape.Categories.Combat:CreateModule({
+-- 	    Name = 'AutoCharge',
+-- 	    Function = function(callback)
+-- 	        debug.setconstant(bedwars.SwordController.attackEntity, 58, callback and 'damage' or 'multiHitCheckDurationSec')
+-- 	        if callback then
+--               if LunarVape.Modules.Killaura and LunarVape.Modules.Killaura.Enabled then AutoCharge:Toggle(); return end
+-- 	            local chargeSwingTime = 0
+-- 	            local canSwing
 	
-	            old = bedwars.SwordController.sendServerRequest
-	            bedwars.SwordController.sendServerRequest = function(self, ...)
-	                if (os.clock() - chargeSwingTime) < AutoChargeTime.Value then return end
-	                self.lastSwingServerTimeDelta = 0.5
-	                chargeSwingTime = os.clock()
-	                canSwing = true
+-- 	            old = bedwars.SwordController.sendServerRequest
+-- 	            bedwars.SwordController.sendServerRequest = function(self, ...)
+-- 	                if (os.clock() - chargeSwingTime) < AutoChargeTime.Value then return end
+-- 	                self.lastSwingServerTimeDelta = 0.5
+-- 	                chargeSwingTime = os.clock()
+-- 	                canSwing = true
 	
-	                local item = self:getHandItem()
-	                if item and item.tool then
-	                    self:playSwordEffect(bedwars.ItemMeta[item.tool.Name], false)
-	                end
+-- 	                local item = self:getHandItem()
+-- 	                if item and item.tool then
+-- 	                    self:playSwordEffect(bedwars.ItemMeta[item.tool.Name], false)
+-- 	                end
 	
-	                return old(self, ...)
-	            end
+-- 	                return old(self, ...)
+-- 	            end
 	
-	            oldSwing = bedwars.SwordController.playSwordEffect
-	            bedwars.SwordController.playSwordEffect = function(...)
-	                if not canSwing then return end
-	                canSwing = false
-	                return oldSwing(...)
-	            end
-	        else
-	            if old then
-	                bedwars.SwordController.sendServerRequest = old
-	                old = nil
-	            end
+-- 	            oldSwing = bedwars.SwordController.playSwordEffect
+-- 	            bedwars.SwordController.playSwordEffect = function(...)
+-- 	                if not canSwing then return end
+-- 	                canSwing = false
+-- 	                return oldSwing(...)
+-- 	            end
+-- 	        else
+-- 	            if old then
+-- 	                bedwars.SwordController.sendServerRequest = old
+-- 	                old = nil
+-- 	            end
 	
-	            if oldSwing then
-	                bedwars.SwordController.playSwordEffect = oldSwing
-	                oldSwing = nil
-	            end
-	        end
-	    end,
-	    Tooltip = 'Allows you to get charged hits while spam clicking.'
-	})
-	AutoChargeTime = AutoCharge:CreateSlider({
-	    Name = 'Charge Time',
-	    Min = 0,
-	    Max = 0.5,
-	    Default = 0.48,
-	    Decimal = 100
-	})
-end)
+-- 	            if oldSwing then
+-- 	                bedwars.SwordController.playSwordEffect = oldSwing
+-- 	                oldSwing = nil
+-- 	            end
+-- 	        end
+-- 	    end,
+-- 	    Tooltip = 'Allows you to get charged hits while spam clicking.'
+-- 	})
+-- 	AutoChargeTime = AutoCharge:CreateSlider({
+-- 	    Name = 'Charge Time',
+-- 	    Min = 0,
+-- 	    Max = 0.5,
+-- 	    Default = 0.48,
+-- 	    Decimal = 100
+-- 	})
+-- end)
 
 run(function()
   local AutoClicker
@@ -2166,7 +2166,7 @@ run(function()
 					local attacked, sword, meta = {}, getAttackData()
 					Attacking = false
 					store.KillauraTarget = nil
-					if sword then
+					if sword and meta then
 						local plrs = entitylib.AllPosition({
 							Range = SwingRange.Value,
 							Wallcheck = Targets.Walls.Enabled or nil,
@@ -2197,6 +2197,11 @@ run(function()
 									Attacking = true
 									store.KillauraTarget = v
 									if not Swing.Enabled and AnimDelay < tick() and not LegitAura.Enabled then
+                    local old
+                    if LunarVape.ThreadFix then
+                      old = getthreadidentity()
+                      setthreadidentity(2)
+                    end
 										AnimDelay = tick() + (meta.sword.respectAttackSpeedForEffects and meta.sword.attackSpeed or math.max(ChargeTime.Value, 0.11))
 										bedwars.SwordController:playSwordEffect(meta, false)
 										if meta.displayName:find(' Scythe') then
@@ -2204,7 +2209,7 @@ run(function()
 										end
 
 										if LunarVape.ThreadFix then
-											setthreadidentity(8)
+											setthreadidentity(old)
 										end
 									end
 								end
@@ -2770,9 +2775,6 @@ run(function()
   local Mode
 	local rayParams = RaycastParams.new()
 	local groundHit
-	task.spawn(function()
-		groundHit = bedwars.Client:Get(remotes.GroundHit).instance
-	end)
 
   NoFall = LunarVape.Categories.Blatant:CreateModule({
 		Name = 'NoFall',
@@ -2796,7 +2798,8 @@ run(function()
 									extraGravity -= workspace.Gravity * dt
 								end
 							else
-								extraGravity = 0
+                root.AssemblyLinearVelocity = Vector3.new(root.AssemblyLinearVelocity.X, 12000, root.AssemblyLinearVelocity.Z)
+                root.CFrame += Vector3.new(0, (-12000) * dt, 0)
 							end
 						end
 					end))
@@ -2807,27 +2810,23 @@ run(function()
 							tracked = entitylib.character.Humanoid.FloorMaterial == Enum.Material.Air and math.min(tracked, root.AssemblyLinearVelocity.Y) or 0
 	
 							if tracked < -85 then
-								if Mode.Value == 'Packet' then
-									groundHit:FireServer(nil, Vector3.new(0, tracked, 0), workspace:GetServerTimeNow())
-								else
-									rayParams.FilterDescendantsInstances = {lplr.Character, gameCamera}
-									rayParams.CollisionGroup = root.CollisionGroup
-	
-									local rootSize = root.Size.Y / 2 + entitylib.character.HipHeight
-									if Mode.Value == 'Teleport' then
-										local ray = workspace:Blockcast(root.CFrame, Vector3.new(3, 3, 3), Vector3.new(0, -1000, 0), rayParams)
-										if ray then
-											root.CFrame -= Vector3.new(0, root.Position.Y - (ray.Position.Y + rootSize), 0)
-										end
-									else
-										local ray = workspace:Blockcast(root.CFrame, Vector3.new(3, 3, 3), Vector3.new(0, (tracked * 0.1) - rootSize, 0), rayParams)
-										if ray then
-											tracked = 0
-											root.AssemblyLinearVelocity = Vector3.new(root.AssemblyLinearVelocity.X, -80, root.AssemblyLinearVelocity.Z)
-										end
-									end
-								end
-							end
+                rayParams.FilterDescendantsInstances = {lplr.Character, gameCamera}
+                rayParams.CollisionGroup = root.CollisionGroup
+
+                local rootSize = root.Size.Y / 2 + entitylib.character.HipHeight
+                if Mode.Value == 'Teleport' then
+                  local ray = workspace:Blockcast(root.CFrame, Vector3.new(3, 3, 3), Vector3.new(0, -1000, 0), rayParams)
+                  if ray then
+                    root.CFrame -= Vector3.new(0, root.Position.Y - (ray.Position.Y + rootSize), 0)
+                  end
+                else
+                  local ray = workspace:Blockcast(root.CFrame, Vector3.new(3, 3, 3), Vector3.new(0, (tracked * 0.1) - rootSize, 0), rayParams)
+                  if ray then
+                    tracked = 0
+                    root.AssemblyLinearVelocity = Vector3.new(root.AssemblyLinearVelocity.X, -80, root.AssemblyLinearVelocity.Z)
+                  end
+                end
+              end
 						end
 	
 						task.wait(0.03)
@@ -2839,7 +2838,7 @@ run(function()
 	})
 	Mode = NoFall:CreateDropdown({
 		Name = 'Mode',
-		List = {'Packet', 'TP', 'Velocity'}
+		List = { 'TP', 'Velocity'}
 	})
 end)
   
@@ -5196,6 +5195,7 @@ run(function()
     Function = function(callback)
       if callback then
         for _, v in getconnections(lplr.Idled) do
+          if not v or not v.Connected then continue end
           v:Disconnect()
         end
   
@@ -7289,7 +7289,7 @@ run(function()
         end)
   
         repeat
-          task.wait(1 / UpdateRate.Value)
+          task.wait(math.clamp(1 / UpdateRate.Value, 0.1, 0.25))
           if not Breaker.Enabled then break end
           if entitylib.isAlive then
             local localPosition = entitylib.character.RootPart.Position
@@ -7325,7 +7325,7 @@ run(function()
   })
   	BreakSpeed = Breaker:CreateSlider({
 		Name = 'Break speed',
-		Min = 0,
+		Min = 0.1,
 		Max = 0.3,
 		Default = 0.25,
 		Decimal = 100,
@@ -7333,9 +7333,9 @@ run(function()
 	})
   UpdateRate = Breaker:CreateSlider({
     Name = 'Update rate',
-    Min = 1,
-    Max = 120,
-    Default = 60,
+    Min = 4,
+    Max = 10,
+    Default = 10,
     Suffix = 'hz'
   })
   Custom = Breaker:CreateTextList({
@@ -7611,40 +7611,40 @@ run(function()
   })
 end)
   
-run(function()
-  local old
-  local Image
+-- run(function()
+--   local old
+--   local Image
   
-  local Crosshair = LunarVape.Legit:CreateModule({
-    Name = 'Crosshair',
-    Function = function(callback)
-      if callback then 
-        old = debug.getconstant(bedwars.ViewmodelController.show, 25)
-        debug.setconstant(bedwars.ViewmodelController.show, 25, Image.Value)
-        debug.setconstant(bedwars.ViewmodelController.show, 37, Image.Value)
-      else
-        debug.setconstant(bedwars.ViewmodelController.show, 25, old)
-        debug.setconstant(bedwars.ViewmodelController.show, 37, old)
-        old = nil 
-      end
-      if bedwars.CameraPerspectiveController:getCameraPerspective() == 0 then
-        bedwars.ViewmodelController:hide()
-        bedwars.ViewmodelController:show()
-      end
-    end,
-    Tooltip = 'Custom first person crosshair depending on the image choosen.'
-  })
-  Image = Crosshair:CreateTextBox({
-    Name = 'Image',
-    Placeholder = 'image id (roblox)',
-    Function = function(enter)
-      if enter and Crosshair.Enabled then 
-        Crosshair:Toggle()
-        Crosshair:Toggle()
-      end
-    end
-  })
-end)
+--   local Crosshair = LunarVape.Legit:CreateModule({
+--     Name = 'Crosshair',
+--     Function = function(callback)
+--       if callback then 
+--         old = debug.getconstant(bedwars.ViewmodelController.show, 25)
+--         debug.setconstant(bedwars.ViewmodelController.show, 25, Image.Value)
+--         debug.setconstant(bedwars.ViewmodelController.show, 37, Image.Value)
+--       else
+--         debug.setconstant(bedwars.ViewmodelController.show, 25, old)
+--         debug.setconstant(bedwars.ViewmodelController.show, 37, old)
+--         old = nil 
+--       end
+--       if bedwars.CameraPerspectiveController:getCameraPerspective() == 0 then
+--         bedwars.ViewmodelController:hide()
+--         bedwars.ViewmodelController:show()
+--       end
+--     end,
+--     Tooltip = 'Custom first person crosshair depending on the image choosen.'
+--   })
+--   Image = Crosshair:CreateTextBox({
+--     Name = 'Image',
+--     Placeholder = 'image id (roblox)',
+--     Function = function(enter)
+--       if enter and Crosshair.Enabled then 
+--         Crosshair:Toggle()
+--         Crosshair:Toggle()
+--       end
+--     end
+--   })
+-- end)
   
 run({identifyexecutor()}, function()
   local DamageIndicator
