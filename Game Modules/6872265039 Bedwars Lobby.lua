@@ -48,7 +48,6 @@ run(function()
   end
   local Flamework = require(replicatedStorage['rbxts_include']['node_modules']['@flamework'].core.out).Flamework
   local Client = require(replicatedStorage.TS.remotes).default.Client
->>>>>>> Stashed changes
 
   bedwars = setmetatable({
     Client = Client,
