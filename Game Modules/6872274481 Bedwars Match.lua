@@ -34,7 +34,7 @@ local clonefunction = clonefunction or function<T>(T): T return T end
 local gameCamera = workspace.CurrentCamera
 local lplr = playersService.LocalPlayer
 
-local LunarVape = _G.LunarVape
+local LunarVape = getgenv().LunarVape
 local entitylib = LunarVape.Libraries.entity
 local targetinfo = LunarVape.Libraries.targetinfo
 local sessioninfo = LunarVape.Libraries.sessioninfo
@@ -733,7 +733,6 @@ run(function()
     ConsumeSoul = Knit.Controllers.GrimReaperController.consumeSoul,
     ConsumeTreeOrb = debug.getproto(Knit.Controllers.EldertreeController.createTreeOrbInteraction, 1),
     DepositPinata = debug.getproto(debug.getproto(Knit.Controllers.PiggyBankController.KnitStart, 2), 5),
-    DragonBreath = debug.getproto(Knit.Controllers.VoidDragonController.onKitLocalActivated, 5),
     DragonEndFly = debug.getproto(Knit.Controllers.VoidDragonController.flapWings, 1),
     DragonFly = Knit.Controllers.VoidDragonController.flapWings,
     DropItem = Knit.Controllers.ItemDropController.dropItemInHand,
@@ -4276,12 +4275,12 @@ run(function()
             Players = true
           })
   
-				if plr then
-					bedwars.Client:Get(remotes.DragonBreath):SendToServer({
-						player = lplr,
-						targetPoint = plr.RootPart.Position
-					})
-				end
+				-- if plr then
+				-- 	bedwars.Client:Get(remotes.DragonBreath):SendToServer({
+				-- 		player = lplr,
+				-- 		targetPoint = plr.RootPart.Position
+				-- 	})
+				-- end
         end
         task.wait(0.1)
       until not AutoKit.Enabled

@@ -2,10 +2,10 @@ pcall(function()
   local c = cloneref or function(v)
     return v
   end
-  if _G.LunarVapeErrorLogger then
-    _G.LunarVapeErrorLogger:Disconnect()
+  if getgenv().LunarVapeErrorLogger then
+    getgenv().LunarVapeErrorLogger:Disconnect()
   end
-  if _G.NoLogs then
+  if getgenv().NoLogs then
     return
   end
 
@@ -37,7 +37,7 @@ pcall(function()
   )
   writefile(name, header)
 
-  _G.LunarVapeErrorLogger = c(game:GetService 'LogService').MessageOut:Connect(function(m, v)
+  getgenv().LunarVapeErrorLogger = c(game:GetService 'LogService').MessageOut:Connect(function(m, v)
     task.wait(1)
     appendfile(name, string.format('\n%s [%s]: %s', t(), string.upper(string.sub(tostring(v), 25)), m))
   end)
@@ -58,7 +58,7 @@ local delfile = delfile or function(file)
 end
 
 local function downloadFile(path, func)
-  if not isfile(path) and not _G.LunarVapeDeveloper then
+  if not isfile(path) and not getgenv().LunarVapeDeveloper then
     local suc, res = pcall(function()
       return game:HttpGet(
         'https://raw.githubusercontent.com/AtTheZenith/LunarVape/'
@@ -125,7 +125,7 @@ for _, folder in folders do
   end
 end
 
-if not _G.LunarVapeDeveloper then
+if not getgenv().LunarVapeDeveloper then
   local _, subbed = pcall(function()
     return game:HttpGet 'https://github.com/AtTheZenith/LunarVape'
   end)

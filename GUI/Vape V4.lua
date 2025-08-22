@@ -19,7 +19,7 @@ local mainapi = {
   Scale = { Value = 1 },
   ThreadFix = setthreadidentity and getthreadidentity and true or false,
   ToggleNotifications = {},
-  Version = 'v2.5',
+  Version = 'v2.5.1',
   Windows = {},
 }
 
@@ -313,7 +313,7 @@ local function createMobileButton(buttonapi, position)
 end
 
 local function downloadFile(path, func)
-  if not isfile(path) and not _G.LunarVapeDeveloper then
+  if not isfile(path) and not getgenv().LunarVapeDeveloper then
     createDownloader(path)
     local suc, res = pcall(function()
       return game:HttpGet(
@@ -5783,7 +5783,7 @@ function mainapi:Load(skipgui, profile)
     tooltip.Visible = false
     self:BlurCheck()
   end)
-  if _G.HideLunarVape then
+  if getgenv().HideLunarVape then
     button.Visible = false
   end
 end
@@ -5915,11 +5915,11 @@ function mainapi:Uninject()
   mainapi.gui:Destroy()
   table.clear(mainapi.Libraries)
   loopClean(mainapi)
-  _G.LunarVape = nil
-  _G.LunarVapereload = nil
-  _G.LunarVapeIndependent = nil
-  if _G.LunarVapeErrorLogger then
-    _G.LunarVapeErrorLogger:Disconnect()
+  getgenv().LunarVape = nil
+  getgenv().LunarVapereload = nil
+  getgenv().LunarVapeIndependent = nil
+  if getgenv().LunarVapeErrorLogger then
+    getgenv().LunarVapeErrorLogger:Disconnect()
   end
 end
 
@@ -6172,8 +6172,8 @@ general:CreateButton {
     if isfile('Lunar Vape/Profiles/' .. mainapi.Profile .. mainapi.Place .. '.json') and delfile then
       delfile('Lunar Vape/Profiles/' .. mainapi.Profile .. mainapi.Place .. '.json')
     end
-    _G.LunarVapereload = true
-    if _G.LunarVapeDeveloper then
+    getgenv().LunarVapereload = true
+    if getgenv().LunarVapeDeveloper then
       loadstring(readfile 'Lunar Vape/Loader.lua', 'Lunar Vape/Loader.lua')()
     else
       loadstring(
@@ -6199,8 +6199,8 @@ general:CreateButton {
 general:CreateButton {
   Name = 'Reinject',
   Function = function()
-    _G.LunarVapereload = true
-    if _G.LunarVapeDeveloper then
+    getgenv().LunarVapereload = true
+    if getgenv().LunarVapeDeveloper then
       loadstring(readfile 'Lunar Vape/Loader.lua', 'Lunar Vape/Loader.lua')()
     else
       loadstring(
@@ -6315,8 +6315,8 @@ guipane:CreateDropdown {
   Function = function(val, mouse)
     if mouse then
       writefile('Lunar Vape/Profiles/GUI.txt', val)
-      _G.LunarVapereload = true
-      if _G.LunarVapeDeveloper then
+      getgenv().LunarVapereload = true
+      if getgenv().LunarVapeDeveloper then
         loadstring(readfile 'Lunar Vape/Loader.lua', 'Lunar Vape/Loader.lua')()
       else
         loadstring(

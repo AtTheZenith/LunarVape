@@ -234,7 +234,7 @@ local function createHighlight(size, pos)
 end
 
 local function downloadFile(path, func)
-  if not isfile(path) and not _G.LunarVapeDeveloper then
+  if not isfile(path) and not getgenv().LunarVapeDeveloper then
     createDownloader(path)
     local suc, res = pcall(function()
       return game:HttpGet(
@@ -2666,9 +2666,9 @@ function mainapi:Uninject()
   mainapi.gui:Destroy()
   table.clear(mainapi.Libraries)
   loopClean(mainapi)
-  _G.LunarVape = nil
-  _G.LunarVapereload = nil
-  _G.LunarVapeIndependent = nil
+  getgenv().LunarVape = nil
+  getgenv().LunarVapereload = nil
+  getgenv().LunarVapeIndependent = nil
 end
 
 gui = Instance.new 'ScreenGui'
@@ -3011,8 +3011,8 @@ mainapi.Categories.Main:CreateDropdown {
   Function = function(val, mouse)
     if mouse then
       writefile('Lunar Vape/Profiles/GUI.txt', val)
-      _G.LunarVapereload = true
-      if _G.LunarVapeDeveloper then
+      getgenv().LunarVapereload = true
+      if getgenv().LunarVapeDeveloper then
         loadstring(readfile 'Lunar Vape/Loader.lua', 'Lunar Vape/Loader.lua')()
       else
         loadstring(
@@ -3047,8 +3047,8 @@ mainapi.RainbowUpdateSpeed = mainapi.Categories.Main:CreateSlider {
 mainapi.Categories.Main:CreateButton {
   Name = 'Reinject',
   Function = function()
-    _G.LunarVapereload = true
-    if _G.LunarVapeDeveloper then
+    getgenv().LunarVapereload = true
+    if getgenv().LunarVapeDeveloper then
       loadstring(readfile 'Lunar Vape/Loader.lua', 'Lunar Vape/Loader.lua')()
     else
       loadstring(

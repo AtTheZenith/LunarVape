@@ -13,7 +13,7 @@ local GAME_NAME = tostring(LunarVape.Place)
 local function downloadFile(path, func)
 	if not isfile(path) and not _G.LunarVapeDeveloper then
 		local suc, res = pcall(function()
-			return game:HttpGet('https://raw.githubusercontent.com/AtTheZenith/LunarVape/'..(isfile('Lunar Vape/Profiles/commit.txt') and readfile('Lunar Vape/Profiles/commit.txt') or 'main')..'/'..(string.gsub(path, 'Lunar Vape/', '')), true)
+			return game:HttpGet('https://raw.githubusercontent.com/AtTheZenith/LunarVape/'..isfile('Lunar Vape/Profiles/Commit.txt') and readfile('Lunar Vape/Profiles/Commit.txt') or 'main'..'/'..(string.gsub(path, 'Lunar Vape/', '')), true)
 		end)
 		if res == '404: Not Found' or res == '' then
 			warn(string.format('Error while downloading file %s: %s', path, res)); return

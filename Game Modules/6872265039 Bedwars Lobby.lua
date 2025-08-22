@@ -17,7 +17,7 @@ local replicatedStorage = cloneref(game:GetService 'ReplicatedStorage')
 local inputService = cloneref(game:GetService 'UserInputService')
 
 local lplr = playersService.LocalPlayer
-local LunarVape = _G.LunarVape
+local LunarVape = getgenv().LunarVape
 local entitylib = LunarVape.Libraries.entity
 local sessioninfo = LunarVape.Libraries.sessioninfo
 local bedwars = {}

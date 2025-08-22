@@ -21,7 +21,7 @@ local starterGui = cloneref(game:GetService 'StarterGui')
 
 local gameCamera = workspace.CurrentCamera
 local lplr = playersService.LocalPlayer
-local LunarVape = _G.LunarVape
+local LunarVape = getgenv().LunarVape
 local entitylib = LunarVape.Libraries.entity
 local targetinfo = LunarVape.Libraries.targetinfo
 local prediction = LunarVape.Libraries.prediction
