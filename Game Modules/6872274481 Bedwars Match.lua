@@ -723,40 +723,40 @@ run(function()
   })
 
   local oldproto = debug.getproto
-  debug.getproto = function(func, num)
+  local newproto = function(func, num)
     local suc, res = pcall(oldproto, func, num)
     return suc and res or function() end
   end
 
   local remoteNames = {
-    AfkStatus = debug.getproto(Knit.Controllers.AfkController.KnitStart, 1),
+    AfkStatus = newproto(Knit.Controllers.AfkController.KnitStart, 1),
     AttackEntity = Knit.Controllers.SwordController.sendServerRequest,
     BeePickup = Knit.Controllers.BeeNetController.trigger,
-    CannonAim = debug.getproto(Knit.Controllers.CannonController.startAiming, 5),
+    CannonAim = newproto(Knit.Controllers.CannonController.startAiming, 5),
     CannonLaunch = Knit.Controllers.CannonHandController.launchSelf,
-    ConsumeBattery = debug.getproto(Knit.Controllers.BatteryController.onKitLocalActivated, 1),
-    ConsumeItem = debug.getproto(Knit.Controllers.ConsumeController.onEnable, 1),
+    ConsumeBattery = newproto(Knit.Controllers.BatteryController.onKitLocalActivated, 1),
+    ConsumeItem = newproto(Knit.Controllers.ConsumeController.onEnable, 1),
     ConsumeSoul = Knit.Controllers.GrimReaperController.consumeSoul,
-    ConsumeTreeOrb = debug.getproto(Knit.Controllers.EldertreeController.createTreeOrbInteraction, 1),
-    DepositPinata = debug.getproto(debug.getproto(Knit.Controllers.PiggyBankController.KnitStart, 2), 5),
-    DragonEndFly = debug.getproto(Knit.Controllers.VoidDragonController.flapWings, 1),
+    ConsumeTreeOrb = newproto(Knit.Controllers.EldertreeController.createTreeOrbInteraction, 1),
+    DepositPinata = newproto(newproto(Knit.Controllers.PiggyBankController.KnitStart, 2), 5),
+    DragonEndFly = newproto(Knit.Controllers.VoidDragonController.flapWings, 1),
     DragonFly = Knit.Controllers.VoidDragonController.flapWings,
     DropItem = Knit.Controllers.ItemDropController.dropItemInHand,
-    EquipItem = debug.getproto(require(replicatedStorage.TS.entity.entities['inventory-entity']).InventoryEntity.equipItem, 3),
+    EquipItem = newproto(require(replicatedStorage.TS.entity.entities['inventory-entity']).InventoryEntity.equipItem, 3),
     FireProjectile = debug.getupvalue(Knit.Controllers.ProjectileController.launchProjectileWithValues, 2),
     GuitarHeal = Knit.Controllers.GuitarController.performHeal,
-    HannahKill = debug.getproto(Knit.Controllers.HannahController.registerExecuteInteractions, 1),
-    HarvestCrop = debug.getproto(debug.getproto(Knit.Controllers.CropController.KnitStart, 4), 1),
-    KaliyahPunch = debug.getproto(Knit.Controllers.DragonSlayerController.onKitLocalActivated, 1),
-    MageSelect = debug.getproto(Knit.Controllers.MageController.registerTomeInteraction, 1),
-    MinerDig = debug.getproto(Knit.Controllers.MinerController.setupMinerPrompts, 1),
+    HannahKill = newproto(Knit.Controllers.HannahController.registerExecuteInteractions, 1),
+    HarvestCrop = newproto(newproto(Knit.Controllers.CropController.KnitStart, 4), 1),
+    KaliyahPunch = newproto(Knit.Controllers.DragonSlayerController.onKitLocalActivated, 1),
+    MageSelect = newproto(Knit.Controllers.MageController.registerTomeInteraction, 1),
+    MinerDig = newproto(Knit.Controllers.MinerController.setupMinerPrompts, 1),
     PickupItem = Knit.Controllers.ItemDropController.checkForPickup,
-    PickupMetal = debug.getproto(Knit.Controllers.HiddenMetalController.onKitLocalActivated, 4),
+    PickupMetal = newproto(Knit.Controllers.HiddenMetalController.onKitLocalActivated, 4),
 --  ReportPlayer = require(lplr.PlayerScripts.TS.controllers.global.report['report-controller']).default.reportPlayer,
---  ResetCharacter = debug.getproto(Knit.Controllers.ResetController.createBindable, 1),
-    SpawnRaven = debug.getproto(Knit.Controllers.RavenController.KnitStart, 1),
+--  ResetCharacter = newproto(Knit.Controllers.ResetController.createBindable, 1),
+    SpawnRaven = newproto(Knit.Controllers.RavenController.KnitStart, 1),
     SummonerClawAttack = Knit.Controllers.SummonerClawController.attack,
-    WarlockTarget = debug.getproto(Knit.Controllers.WarlockStaffController.KnitStart, 2)
+    WarlockTarget = newproto(Knit.Controllers.WarlockStaffController.KnitStart, 2)
   }
 
   local function dumpRemote(tab)
