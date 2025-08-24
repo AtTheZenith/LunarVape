@@ -722,6 +722,12 @@ run(function()
     end
   })
 
+  local oldproto = debug.getproto
+  debug.getproto = function(func, num)
+    local suc, res = pcall(oldproto, func, num)
+    return suc and res or function() end
+  end
+
   local remoteNames = {
     AfkStatus = debug.getproto(Knit.Controllers.AfkController.KnitStart, 1),
     AttackEntity = Knit.Controllers.SwordController.sendServerRequest,
