@@ -738,7 +738,7 @@ run(function()
     ConsumeItem = newproto(Knit.Controllers.ConsumeController.onEnable, 1),
     ConsumeSoul = Knit.Controllers.GrimReaperController.consumeSoul,
     ConsumeTreeOrb = newproto(Knit.Controllers.EldertreeController.createTreeOrbInteraction, 1),
-    DepositPinata = newproto(newproto(Knit.Controllers.PiggyBankController.KnitStart, 2), 5),
+--    DepositPinata = newproto(newproto(Knit.Controllers.PiggyBankController.KnitStart, 2), 5),
     DragonEndFly = newproto(Knit.Controllers.VoidDragonController.flapWings, 1),
     DragonFly = Knit.Controllers.VoidDragonController.flapWings,
     DropItem = Knit.Controllers.ItemDropController.dropItemInHand,
@@ -746,7 +746,7 @@ run(function()
     FireProjectile = debug.getupvalue(Knit.Controllers.ProjectileController.launchProjectileWithValues, 2),
     GuitarHeal = Knit.Controllers.GuitarController.performHeal,
     HannahKill = newproto(Knit.Controllers.HannahController.registerExecuteInteractions, 1),
-    HarvestCrop = newproto(newproto(Knit.Controllers.CropController.KnitStart, 4), 1),
+    -- HarvestCrop = newproto(newproto(Knit.Controllers.CropController.KnitStart, 4), 1),
     KaliyahPunch = newproto(Knit.Controllers.DragonSlayerController.onKitLocalActivated, 1),
     MageSelect = newproto(Knit.Controllers.MageController.registerTomeInteraction, 1),
     MinerDig = newproto(Knit.Controllers.MinerController.setupMinerPrompts, 1),
@@ -4098,14 +4098,14 @@ run(function()
 			})
 		end, 18, true)
 	end,
-    farmer_cletus = function()
-      kitCollection('HarvestableCrop', function(v)
-        if bedwars.Client:Get(remotes.HarvestCrop):CallServer({position = bedwars.BlockController:getBlockPosition(v.Position)}) then
-          bedwars.GameAnimationUtil:playAnimation(lplr.Character, bedwars.AnimationType.PUNCH)
-          bedwars.SoundManager:playSound(bedwars.SoundList.CROP_HARVEST)
-        end
-      end, 10, false)
-    end,
+--    farmer_cletus = function()
+--      kitCollection('HarvestableCrop', function(v)
+--        if bedwars.Client:Get(remotes.HarvestCrop):CallServer({position = bedwars.BlockController:getBlockPosition(v.Position)}) then
+--          bedwars.GameAnimationUtil:playAnimation(lplr.Character, bedwars.AnimationType.PUNCH)
+--          bedwars.SoundManager:playSound(bedwars.SoundList.CROP_HARVEST)
+--        end
+--      end, 10, false)
+--    end,
     fisherman = function()
       local old = bedwars.FishingMinigameController.startMinigame
       bedwars.FishingMinigameController.startMinigame = function(_, _, result)
@@ -4199,13 +4199,13 @@ run(function()
         })
       end, 6, true)
     end,
-    pinata = function()
-      kitCollection(lplr.Name..':pinata', function(v)
-        if getItem('candy') then
-          bedwars.Client:Get(remotes.DepositPinata):CallServer(v)
-        end
-      end, 6, true)
-    end,
+--    pinata = function()
+--      kitCollection(lplr.Name..':pinata', function(v)
+--        if getItem('candy') then
+--          bedwars.Client:Get(remotes.DepositPinata):CallServer(v)
+--        end
+--      end, 6, true)
+--    end,
     spirit_assassin = function()
       kitCollection('EvelynnSoul', function(v)
         bedwars.SpiritAssassinController:useSpirit(lplr, v)
