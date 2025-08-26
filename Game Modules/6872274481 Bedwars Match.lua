@@ -724,7 +724,7 @@ run(function()
 
   local oldproto = debug.getproto
   local newproto = function(func, num)
-    local suc, res = pcall(oldproto, func, num)
+    local suc, res = pcall(function() return oldproto(func, num) end)
     return suc and res or function() end
   end
 
