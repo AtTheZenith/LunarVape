@@ -1,3 +1,5 @@
+if game:GetService('UserInputService').TouchEnabled then return end
+
 local registry = {
   ['11630038968'] = 'Bridge Duels',
   ['6872274481'] = 'Bedwars Match',

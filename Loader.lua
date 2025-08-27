@@ -102,7 +102,6 @@ local function wipeFolder(path): ()
           1,
           readfile(file):find '--This watermark is used to delete the file if its cached, remove it to make the file persist after Lunar Vape updates.'
         ) == 1
-      or file:find 'json'
     then
       delfile(file)
     end

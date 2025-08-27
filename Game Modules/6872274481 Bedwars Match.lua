@@ -723,11 +723,12 @@ run(function()
   })
 
   local oldproto = debug.getproto
-  local newproto = function(func, num)
+  local function newproto(func, num)
     local suc, res = pcall(function() return oldproto(func, num) end)
-    return suc and res or function() end
+    return suc and res or nil
   end
 
+  -- it's a hashtable why declare it alltogether
   local remoteNames = {
     AfkStatus = newproto(Knit.Controllers.AfkController.KnitStart, 1),
     AttackEntity = Knit.Controllers.SwordController.sendServerRequest,
@@ -4002,28 +4003,31 @@ run(function()
   end
   
   local AutoKitFunctions = {
-	battery = function()
-		repeat
-			if entitylib.isAlive then
-				local localPosition = entitylib.character.RootPart.Position
-				for i, v in bedwars.BatteryEffectsController.liveBatteries do
-					if (v.position - localPosition).Magnitude <= 10 then
-						local BatteryInfo = bedwars.BatteryEffectsController:getBatteryInfo(i)
-						if not BatteryInfo or BatteryInfo.activateTime >= workspace:GetServerTimeNow() or BatteryInfo.consumeTime + 0.1 >= workspace:GetServerTimeNow() then continue end
-						BatteryInfo.consumeTime = workspace:GetServerTimeNow()
-						bedwars.Client:Get(remotes.ConsumeBattery):SendToServer({batteryId = i})
-					end
-       end
-			end
-			task.wait(0.1)
-		until not AutoKit.Enabled
- end,
+    battery = function()
+      if not remotes.ConsumeBattery then return end
+      repeat
+        if entitylib.isAlive then
+          local localPosition = entitylib.character.RootPart.Position
+          for i, v in bedwars.BatteryEffectsController.liveBatteries do
+            if (v.position - localPosition).Magnitude <= 10 then
+              local BatteryInfo = bedwars.BatteryEffectsController:getBatteryInfo(i)
+              if not BatteryInfo or BatteryInfo.activateTime >= workspace:GetServerTimeNow() or BatteryInfo.consumeTime + 0.1 >= workspace:GetServerTimeNow() then continue end
+              BatteryInfo.consumeTime = workspace:GetServerTimeNow()
+              bedwars.Client:Get(remotes.ConsumeBattery):SendToServer({batteryId = i})
+            end
+        end
+        end
+        task.wait(0.1)
+      until not AutoKit.Enabled
+    end,
     beekeeper = function()
+      if not remotes.BeePickup then return end
       kitCollection('bee', function(v)
         bedwars.Client:Get(remotes.BeePickup):SendToServer({beeId = v:GetAttribute('BeeId')})
       end, 18, false)
     end,
     bigman = function()
+      if not remotes.ConsumeTreeOrb then return end
       kitCollection('treeOrb', function(v)
         if bedwars.Client:Get(remotes.ConsumeTreeOrb):CallServer({treeOrbSecret = v:GetAttribute('TreeOrbSecret')}) then
           v:Destroy()
@@ -4089,15 +4093,16 @@ run(function()
         bedwars.CannonHandController.launchSelf = old
       end)
     end,
- dragon_slayer = function()
-   kitCollection('KaliyahPunchInteraction', function(v)
-			bedwars.DragonSlayerController:deleteEmblem(v)
-			bedwars.DragonSlayerController:playPunchAnimation(Vector3.zero)
-			bedwars.Client:Get(remotes.KaliyahPunch):SendToServer({
-				target = v
-			})
-		end, 18, true)
-	end,
+    dragon_slayer = function()
+      if not remotes.KaliyahPunch then return end
+      kitCollection('KaliyahPunchInteraction', function(v)
+        bedwars.DragonSlayerController:deleteEmblem(v)
+        bedwars.DragonSlayerController:playPunchAnimation(Vector3.zero)
+        bedwars.Client:Get(remotes.KaliyahPunch):SendToServer({
+          target = v
+        }) end, 18, true
+      )
+    end,
 --    farmer_cletus = function()
 --      kitCollection('HarvestableCrop', function(v)
 --        if bedwars.Client:Get(remotes.HarvestCrop):CallServer({position = bedwars.BlockController:getBlockPosition(v.Position)}) then
@@ -4136,6 +4141,7 @@ run(function()
       end)
     end,
     hannah = function()
+      if not remotes.HannahKill then return end
       kitCollection('HannahExecuteInteraction', function(v)
         local billboard = bedwars.Client:Get(remotes.HannahKill):CallServer({
           user = lplr,
@@ -4162,6 +4168,7 @@ run(function()
       end, 120, false)
     end,
     melody = function()
+      if not remotes.GuitarHeal then return end
       repeat
         local mag, hp, ent = 30, math.huge
         if entitylib.isAlive then
@@ -4186,6 +4193,7 @@ run(function()
       until not AutoKit.Enabled
     end,
     metal_detector = function()
+      if not remotes.PickupMetal then return end
       kitCollection('hidden-metal', function(v)
         bedwars.Client:Get(remotes.PickupMetal):SendToServer({
           id = v:GetAttribute('Id')
@@ -4193,6 +4201,7 @@ run(function()
       end, 20, false)
     end,
     miner = function()
+      if not remotes.MinerDig then return end
       kitCollection('petrified-player', function(v)
         bedwars.Client:Get(remotes.MinerDig):SendToServer({
           petrifyId = v:GetAttribute('PetrifyId')
@@ -4217,6 +4226,7 @@ run(function()
       end, 20, false)
     end,
     summoner = function()
+      if not remotes.SummonerClawAttack then return end
       AutoKit:Clean(bedwars.Client:Get('SummonerClawAttackFromServer'):Connect(function(data)
         if data.player == lplr then
           bedwars.SummonerKitController:clawAttack(data.player, data.position, data.direction)
@@ -4247,6 +4257,7 @@ run(function()
       until not AutoKit.Enabled
     end,
     void_dragon = function(): ()
+      if not remotes.DragonFly or not remotes.DragonEndFly or not remotes.DragonBreath then return end
       local oldflap = bedwars.VoidDragonController.flapWings
       local flapped
   
@@ -5652,7 +5663,7 @@ run(function()
     Name = 'Schematica',
     Function = function(callback)
       if callback then
-        if not File.Value:find('.json') then
+        if not File.Value:find('.txt') then
           notif('Schematica', 'Invalid file', 3)
           Schematica:Toggle()
           return
