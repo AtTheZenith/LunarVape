@@ -6311,7 +6311,7 @@ scaleslider = guipane:CreateSlider {
 }
 guipane:CreateDropdown {
   Name = 'GUI Theme',
-  List = inputService.TouchEnabled and { 'Vape V4', 'Vape V3' } or { 'Vape V4', 'Vape V3', 'Rise' },
+  List = { 'Vape V4' },
   Function = function(val, mouse)
     if mouse then
       writefile('Lunar Vape/Profiles/GUI.txt', val)
