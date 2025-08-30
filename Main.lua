@@ -110,7 +110,7 @@ end
 if not isfile 'Lunar Vape/Profiles/GUI.txt' then
   writefile('Lunar Vape/Profiles/GUI.txt', 'Vape V4')
 end
-local gui = readfile 'Lunar Vape/Profiles/GUI.txt' or 'Vape V4'
+local gui = 'Vape V4'
 
 if not isfolder('Lunar Vape/Assets/' .. gui) then
   makefolder('Lunar Vape/Assets/' .. gui)
