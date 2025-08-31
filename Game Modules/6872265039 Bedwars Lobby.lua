@@ -17,7 +17,7 @@ local replicatedStorage = cloneref(game:GetService 'ReplicatedStorage')
 local inputService = cloneref(game:GetService 'UserInputService')
 
 local lplr = playersService.LocalPlayer
-local LunarVape = getgenv().LunarVape
+local LunarVape = _G.LunarVape
 local entitylib = LunarVape.Libraries.entity
 local sessioninfo = LunarVape.Libraries.sessioninfo
 local bedwars = {}
@@ -31,6 +31,20 @@ run(function()
     local ind = table.find(tab, 'Client')
     return ind and tab[ind + 1] or ''
   end
+
+<<<<<<< Updated upstream
+	local KnitInit, Knit
+	repeat
+		KnitInit, Knit = pcall(function() return debug.getupvalue(require(lplr.PlayerScripts.TS.knit).setup, 9) end)
+		if KnitInit then break end
+		task.wait()
+	until KnitInit
+	if not debug.getupvalue(Knit.Start, 1) then
+		repeat task.wait() until debug.getupvalue(Knit.Start, 1)
+	end
+	local Flamework = require(replicatedStorage['rbxts_include']['node_modules']['@flamework'].core.out).Flamework
+	local Client = require(replicatedStorage.TS.remotes).default.Client
+=======
   local KnitInit, Knit
   repeat
     KnitInit, Knit = pcall(function()
@@ -48,6 +62,7 @@ run(function()
   end
   local Flamework = require(replicatedStorage['rbxts_include']['node_modules']['@flamework'].core.out).Flamework
   local Client = require(replicatedStorage.TS.remotes).default.Client
+>>>>>>> Stashed changes
 
   bedwars = setmetatable({
     Client = Client,

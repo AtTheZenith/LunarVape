@@ -34,7 +34,7 @@ local clonefunction = clonefunction or function<T>(T): T return T end
 local gameCamera = workspace.CurrentCamera
 local lplr = playersService.LocalPlayer
 
-local LunarVape = getgenv().LunarVape
+local LunarVape = _G.LunarVape
 local entitylib = LunarVape.Libraries.entity
 local targetinfo = LunarVape.Libraries.targetinfo
 local sessioninfo = LunarVape.Libraries.sessioninfo
@@ -722,42 +722,35 @@ run(function()
     end
   })
 
-  local oldproto = debug.getproto
-  local function newproto(func, num)
-    local suc, res = pcall(function() return oldproto(func, num) end)
-    return suc and res or nil
-  end
-
-  -- it's a hashtable why declare it alltogether
   local remoteNames = {
-    AfkStatus = newproto(Knit.Controllers.AfkController.KnitStart, 1),
+    AfkStatus = debug.getproto(Knit.Controllers.AfkController.KnitStart, 1),
     AttackEntity = Knit.Controllers.SwordController.sendServerRequest,
     BeePickup = Knit.Controllers.BeeNetController.trigger,
-    CannonAim = newproto(Knit.Controllers.CannonController.startAiming, 5),
+    CannonAim = debug.getproto(Knit.Controllers.CannonController.startAiming, 5),
     CannonLaunch = Knit.Controllers.CannonHandController.launchSelf,
-    ConsumeBattery = newproto(Knit.Controllers.BatteryController.onKitLocalActivated, 1),
-    ConsumeItem = newproto(Knit.Controllers.ConsumeController.onEnable, 1),
+    ConsumeBattery = debug.getproto(Knit.Controllers.BatteryController.onKitLocalActivated, 1),
+    ConsumeItem = debug.getproto(Knit.Controllers.ConsumeController.onEnable, 1),
     ConsumeSoul = Knit.Controllers.GrimReaperController.consumeSoul,
-    ConsumeTreeOrb = newproto(Knit.Controllers.EldertreeController.createTreeOrbInteraction, 1),
---    DepositPinata = newproto(newproto(Knit.Controllers.PiggyBankController.KnitStart, 2), 5),
-    DragonEndFly = newproto(Knit.Controllers.VoidDragonController.flapWings, 1),
+    ConsumeTreeOrb = debug.getproto(Knit.Controllers.EldertreeController.createTreeOrbInteraction, 1),
+    DepositPinata = debug.getproto(debug.getproto(Knit.Controllers.PiggyBankController.KnitStart, 2), 5),
+    DragonEndFly = debug.getproto(Knit.Controllers.VoidDragonController.flapWings, 1),
     DragonFly = Knit.Controllers.VoidDragonController.flapWings,
     DropItem = Knit.Controllers.ItemDropController.dropItemInHand,
-    EquipItem = newproto(require(replicatedStorage.TS.entity.entities['inventory-entity']).InventoryEntity.equipItem, 3),
+    EquipItem = debug.getproto(require(replicatedStorage.TS.entity.entities['inventory-entity']).InventoryEntity.equipItem, 3),
     FireProjectile = debug.getupvalue(Knit.Controllers.ProjectileController.launchProjectileWithValues, 2),
     GuitarHeal = Knit.Controllers.GuitarController.performHeal,
-    HannahKill = newproto(Knit.Controllers.HannahController.registerExecuteInteractions, 1),
-    -- HarvestCrop = newproto(newproto(Knit.Controllers.CropController.KnitStart, 4), 1),
-    KaliyahPunch = newproto(Knit.Controllers.DragonSlayerController.onKitLocalActivated, 1),
-    MageSelect = newproto(Knit.Controllers.MageController.registerTomeInteraction, 1),
-    MinerDig = newproto(Knit.Controllers.MinerController.setupMinerPrompts, 1),
+    HannahKill = debug.getproto(Knit.Controllers.HannahController.registerExecuteInteractions, 1),
+    HarvestCrop = debug.getproto(debug.getproto(Knit.Controllers.CropController.KnitStart, 4), 1),
+    KaliyahPunch = debug.getproto(Knit.Controllers.DragonSlayerController.onKitLocalActivated, 1),
+    MageSelect = debug.getproto(Knit.Controllers.MageController.registerTomeInteraction, 1),
+    MinerDig = debug.getproto(Knit.Controllers.MinerController.setupMinerPrompts, 1),
     PickupItem = Knit.Controllers.ItemDropController.checkForPickup,
-    PickupMetal = newproto(Knit.Controllers.HiddenMetalController.onKitLocalActivated, 4),
+    PickupMetal = debug.getproto(Knit.Controllers.HiddenMetalController.onKitLocalActivated, 4),
 --  ReportPlayer = require(lplr.PlayerScripts.TS.controllers.global.report['report-controller']).default.reportPlayer,
---  ResetCharacter = newproto(Knit.Controllers.ResetController.createBindable, 1),
-    SpawnRaven = newproto(Knit.Controllers.RavenController.KnitStart, 1),
+--  ResetCharacter = debug.getproto(Knit.Controllers.ResetController.createBindable, 1),
+    SpawnRaven = debug.getproto(Knit.Controllers.RavenController.KnitStart, 1),
     SummonerClawAttack = Knit.Controllers.SummonerClawController.attack,
-    WarlockTarget = newproto(Knit.Controllers.WarlockStaffController.KnitStart, 2)
+    WarlockTarget = debug.getproto(Knit.Controllers.WarlockStaffController.KnitStart, 2)
   }
 
   local function dumpRemote(tab)
@@ -4003,31 +3996,28 @@ run(function()
   end
   
   local AutoKitFunctions = {
-    battery = function()
-      if not remotes.ConsumeBattery then return end
-      repeat
-        if entitylib.isAlive then
-          local localPosition = entitylib.character.RootPart.Position
-          for i, v in bedwars.BatteryEffectsController.liveBatteries do
-            if (v.position - localPosition).Magnitude <= 10 then
-              local BatteryInfo = bedwars.BatteryEffectsController:getBatteryInfo(i)
-              if not BatteryInfo or BatteryInfo.activateTime >= workspace:GetServerTimeNow() or BatteryInfo.consumeTime + 0.1 >= workspace:GetServerTimeNow() then continue end
-              BatteryInfo.consumeTime = workspace:GetServerTimeNow()
-              bedwars.Client:Get(remotes.ConsumeBattery):SendToServer({batteryId = i})
-            end
-        end
-        end
-        task.wait(0.1)
-      until not AutoKit.Enabled
-    end,
+	battery = function()
+		repeat
+			if entitylib.isAlive then
+				local localPosition = entitylib.character.RootPart.Position
+				for i, v in bedwars.BatteryEffectsController.liveBatteries do
+					if (v.position - localPosition).Magnitude <= 10 then
+						local BatteryInfo = bedwars.BatteryEffectsController:getBatteryInfo(i)
+						if not BatteryInfo or BatteryInfo.activateTime >= workspace:GetServerTimeNow() or BatteryInfo.consumeTime + 0.1 >= workspace:GetServerTimeNow() then continue end
+						BatteryInfo.consumeTime = workspace:GetServerTimeNow()
+						bedwars.Client:Get(remotes.ConsumeBattery):SendToServer({batteryId = i})
+					end
+       end
+			end
+			task.wait(0.1)
+		until not AutoKit.Enabled
+ end,
     beekeeper = function()
-      if not remotes.BeePickup then return end
       kitCollection('bee', function(v)
         bedwars.Client:Get(remotes.BeePickup):SendToServer({beeId = v:GetAttribute('BeeId')})
       end, 18, false)
     end,
     bigman = function()
-      if not remotes.ConsumeTreeOrb then return end
       kitCollection('treeOrb', function(v)
         if bedwars.Client:Get(remotes.ConsumeTreeOrb):CallServer({treeOrbSecret = v:GetAttribute('TreeOrbSecret')}) then
           v:Destroy()
@@ -4093,24 +4083,23 @@ run(function()
         bedwars.CannonHandController.launchSelf = old
       end)
     end,
-    dragon_slayer = function()
-      if not remotes.KaliyahPunch then return end
-      kitCollection('KaliyahPunchInteraction', function(v)
-        bedwars.DragonSlayerController:deleteEmblem(v)
-        bedwars.DragonSlayerController:playPunchAnimation(Vector3.zero)
-        bedwars.Client:Get(remotes.KaliyahPunch):SendToServer({
-          target = v
-        }) end, 18, true
-      )
+ dragon_slayer = function()
+   kitCollection('KaliyahPunchInteraction', function(v)
+			bedwars.DragonSlayerController:deleteEmblem(v)
+			bedwars.DragonSlayerController:playPunchAnimation(Vector3.zero)
+			bedwars.Client:Get(remotes.KaliyahPunch):SendToServer({
+				target = v
+			})
+		end, 18, true)
+	end,
+    farmer_cletus = function()
+      kitCollection('HarvestableCrop', function(v)
+        if bedwars.Client:Get(remotes.HarvestCrop):CallServer({position = bedwars.BlockController:getBlockPosition(v.Position)}) then
+          bedwars.GameAnimationUtil:playAnimation(lplr.Character, bedwars.AnimationType.PUNCH)
+          bedwars.SoundManager:playSound(bedwars.SoundList.CROP_HARVEST)
+        end
+      end, 10, false)
     end,
---    farmer_cletus = function()
---      kitCollection('HarvestableCrop', function(v)
---        if bedwars.Client:Get(remotes.HarvestCrop):CallServer({position = bedwars.BlockController:getBlockPosition(v.Position)}) then
---          bedwars.GameAnimationUtil:playAnimation(lplr.Character, bedwars.AnimationType.PUNCH)
---          bedwars.SoundManager:playSound(bedwars.SoundList.CROP_HARVEST)
---        end
---      end, 10, false)
---    end,
     fisherman = function()
       local old = bedwars.FishingMinigameController.startMinigame
       bedwars.FishingMinigameController.startMinigame = function(_, _, result)
@@ -4141,7 +4130,6 @@ run(function()
       end)
     end,
     hannah = function()
-      if not remotes.HannahKill then return end
       kitCollection('HannahExecuteInteraction', function(v)
         local billboard = bedwars.Client:Get(remotes.HannahKill):CallServer({
           user = lplr,
@@ -4168,7 +4156,6 @@ run(function()
       end, 120, false)
     end,
     melody = function()
-      if not remotes.GuitarHeal then return end
       repeat
         local mag, hp, ent = 30, math.huge
         if entitylib.isAlive then
@@ -4193,7 +4180,6 @@ run(function()
       until not AutoKit.Enabled
     end,
     metal_detector = function()
-      if not remotes.PickupMetal then return end
       kitCollection('hidden-metal', function(v)
         bedwars.Client:Get(remotes.PickupMetal):SendToServer({
           id = v:GetAttribute('Id')
@@ -4201,20 +4187,19 @@ run(function()
       end, 20, false)
     end,
     miner = function()
-      if not remotes.MinerDig then return end
       kitCollection('petrified-player', function(v)
         bedwars.Client:Get(remotes.MinerDig):SendToServer({
           petrifyId = v:GetAttribute('PetrifyId')
         })
       end, 6, true)
     end,
---    pinata = function()
---      kitCollection(lplr.Name..':pinata', function(v)
---        if getItem('candy') then
---          bedwars.Client:Get(remotes.DepositPinata):CallServer(v)
---        end
---      end, 6, true)
---    end,
+    pinata = function()
+      kitCollection(lplr.Name..':pinata', function(v)
+        if getItem('candy') then
+          bedwars.Client:Get(remotes.DepositPinata):CallServer(v)
+        end
+      end, 6, true)
+    end,
     spirit_assassin = function()
       kitCollection('EvelynnSoul', function(v)
         bedwars.SpiritAssassinController:useSpirit(lplr, v)
@@ -4226,7 +4211,6 @@ run(function()
       end, 20, false)
     end,
     summoner = function()
-      if not remotes.SummonerClawAttack then return end
       AutoKit:Clean(bedwars.Client:Get('SummonerClawAttackFromServer'):Connect(function(data)
         if data.player == lplr then
           bedwars.SummonerKitController:clawAttack(data.player, data.position, data.direction)
@@ -4257,7 +4241,6 @@ run(function()
       until not AutoKit.Enabled
     end,
     void_dragon = function(): ()
-      if not remotes.DragonFly or not remotes.DragonEndFly or not remotes.DragonBreath then return end
       local oldflap = bedwars.VoidDragonController.flapWings
       local flapped
   

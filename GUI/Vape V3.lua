@@ -225,7 +225,7 @@ local function createMobileButton(buttonapi, position)
 end
 
 local function downloadFile(path, func)
-  if not isfile(path) and not getgenv().LunarVapeDeveloper then
+  if not isfile(path) and not _G.LunarVapeDeveloper then
     createDownloader(path)
     local suc, res = pcall(function()
       return game:HttpGet(
@@ -3568,9 +3568,9 @@ function mainapi:Uninject()
   mainapi.gui:Destroy()
   table.clear(mainapi.Libraries)
   loopClean(mainapi)
-  getgenv().LunarVape = nil
-  getgenv().LunarVapereload = nil
-  getgenv().LunarVapeIndependent = nil
+  _G.LunarVape = nil
+  _G.LunarVapereload = nil
+  _G.LunarVapeIndependent = nil
 end
 
 gui = Instance.new 'ScreenGui'
@@ -3927,8 +3927,8 @@ topbar:CreateDropdown {
   Function = function(val, mouse)
     if mouse then
       writefile('Lunar Vape/Profiles/GUI.txt', val)
-      getgenv().LunarVapereload = true
-      if getgenv().LunarVapeDeveloper then
+      _G.LunarVapereload = true
+      if _G.LunarVapeDeveloper then
         loadstring(readfile 'Lunar Vape/Loader.lua', 'Lunar Vape/Loader.lua')()
       else
         loadstring(
@@ -3972,8 +3972,8 @@ topbar:CreateButton {
     if isfile('Lunar Vape/Profiles/' .. mainapi.Profile .. mainapi.Place .. '.json') and delfile then
       delfile('Lunar Vape/Profiles/' .. mainapi.Profile .. mainapi.Place .. '.json')
     end
-    getgenv().LunarVapereload = true
-    if getgenv().LunarVapeDeveloper then
+    _G.LunarVapereload = true
+    if _G.LunarVapeDeveloper then
       loadstring(readfile 'Lunar Vape/Loader.lua', 'Lunar Vape/Loader.lua')()
     else
       loadstring(
@@ -4042,8 +4042,8 @@ topbar:CreateButton {
 topbar:CreateButton {
   Name = 'REINEJCT',
   Function = function()
-    getgenv().LunarVapereload = true
-    if getgenv().LunarVapeDeveloper then
+    _G.LunarVapereload = true
+    if _G.LunarVapeDeveloper then
       loadstring(readfile 'Lunar Vape/Loader.lua', 'Lunar Vape/Loader.lua')()
     else
       loadstring(

@@ -14,7 +14,7 @@ local isfile = isfile
     return suc and res ~= nil and res ~= ''
   end
 local function downloadFile(path, func)
-  if not isfile(path) and not getgenv().LunarVapeDeveloper then
+  if not isfile(path) and not _G.LunarVapeDeveloper then
     local suc, res = pcall(function()
       return game:HttpGet(
         'https://raw.githubusercontent.com/AtTheZenith/LunarVape/'
@@ -77,7 +77,7 @@ local gameCamera = workspace.CurrentCamera or workspace:FindFirstChildWhichIsA '
 local lplr = playersService.LocalPlayer
 local assetfunction = getcustomasset
 
-local LunarVape = getgenv().LunarVape
+local LunarVape = _G.LunarVape
 local tween = LunarVape.Libraries.tween
 local targetinfo = LunarVape.Libraries.targetinfo
 local getfontsize = LunarVape.Libraries.getfontsize
@@ -170,7 +170,7 @@ end
 local visited, attempted, tpSwitch = {}, {}, false
 local cacheExpire, cache = tick()
 local function serverHop(pointer, filter)
-  visited = getgenv().LunarVapeserverhoplist and getgenv().LunarVapeserverhoplist:split '/' or {}
+  visited = _G.LunarVapeserverhoplist and _G.LunarVapeserverhoplist:split '/' or {}
   if not table.find(visited, game.JobId) then
     table.insert(visited, game.JobId)
   end
@@ -226,7 +226,7 @@ LunarVape:Clean(lplr.OnTeleport:Connect(function()
   if not tpSwitch then
     tpSwitch = true
     queue_on_teleport(
-      "getgenv().LunarVapeserverhoplist = '"
+      "_G.LunarVapeserverhoplist = '"
         .. table.concat(visited, '/')
         .. "'\n_G.LunarVapeserverhopprevious = '"
         .. game.JobId
@@ -5401,13 +5401,13 @@ run(function()
           if not teleportedServers then
             teleportedServers = true
             queue_on_teleport(
-              "getgenv().LunarVapesessioninfo = '" .. httpService:JSONEncode(LunarVape.Libraries.sessioninfo.Objects) .. "'"
+              "_G.LunarVapesessioninfo = '" .. httpService:JSONEncode(LunarVape.Libraries.sessioninfo.Objects) .. "'"
             )
           end
         end))
 
-        if getgenv().LunarVapesessioninfo then
-          for i, v in httpService:JSONDecode(getgenv().LunarVapesessioninfo) do
+        if _G.LunarVapesessioninfo then
+          for i, v in httpService:JSONDecode(_G.LunarVapesessioninfo) do
             if LunarVape.Libraries.sessioninfo.Objects[i] and v.Saved then
               LunarVape.Libraries.sessioninfo.Objects[i].Value = v.Value
             end
@@ -6293,11 +6293,11 @@ run({ 'Solara' }, function()
     Function = function()
       notif(
         'ServerHop',
-        getgenv().LunarVapeserverhopprevious and 'Rejoining previous server...' or 'Cannot find previous server',
+        _G.LunarVapeserverhopprevious and 'Rejoining previous server...' or 'Cannot find previous server',
         5
       )
-      if getgenv().LunarVapeserverhopprevious then
-        teleportService:TeleportToPlaceInstance(game.PlaceId, getgenv().LunarVapeserverhopprevious)
+      if _G.LunarVapeserverhopprevious then
+        teleportService:TeleportToPlaceInstance(game.PlaceId, _G.LunarVapeserverhopprevious)
       end
     end,
   }

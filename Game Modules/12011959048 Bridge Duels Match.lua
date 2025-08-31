@@ -1,4 +1,4 @@
-local LunarVape = getgenv().LunarVape
+local LunarVape = _G.LunarVape
 local loadstring = function(...)
   local res, err = loadstring(...)
   if err and LunarVape then
@@ -15,7 +15,7 @@ local isfile = isfile
     return suc and res ~= nil and res ~= ''
   end
 local function downloadFile(path, func)
-  if not isfile(path) and not getgenv().LunarVapeDeveloper then
+  if not isfile(path) and not _G.LunarVapeDeveloper then
     local suc, res = pcall(function()
       return game:HttpGet(
         'https://raw.githubusercontent.com/AtTheZenith/LunarVape/'
@@ -49,7 +49,7 @@ if GAME_NAME and isfile('Lunar Vape/Game Modules/' .. LunarVape.Place .. GAME_NA
     'Lunar Vape/Game Modules/' .. LunarVape.Place .. GAME_NAME .. '.lua'
   )()
 else
-  if not getgenv().LunarVapeDeveloper then
+  if not _G.LunarVapeDeveloper then
     local suc, res = pcall(function()
       return downloadFile('Lunar Vape/Game Modules/' .. LunarVape.Place .. GAME_NAME .. '.lua')
     end)

@@ -14,7 +14,7 @@ local isfile = isfile
     return suc and res ~= nil and res ~= ''
   end
 local function downloadFile(path, func)
-  if not isfile(path) and not getgenv().LunarVapeDeveloper then
+  if not isfile(path) and not _G.LunarVapeDeveloper then
     local suc, res = pcall(function()
       return game:HttpGet(
         'https://raw.githubusercontent.com/AtTheZenith/LunarVape/'
@@ -62,7 +62,7 @@ local debrisService = cloneref(game:GetService 'Debris')
 local gameCamera = workspace.CurrentCamera
 local lplr = playersService.LocalPlayer
 
-local LunarVape = getgenv().LunarVape
+local LunarVape = _G.LunarVape
 local entitylib = LunarVape.Libraries.entity
 local prediction = LunarVape.Libraries.prediction
 local targetinfo = LunarVape.Libraries.targetinfo
@@ -76,7 +76,7 @@ end
 
 if not select(1, ...) and game.PlaceId == 5938036553 then
   if run_on_actor and getactors then
-    local oldreload = getgenv().LunarVapereload
+    local oldreload = _G.LunarVapereload
     LunarVape.Load = function()
       task.delay(0.1, function()
         LunarVape:Uninject()
@@ -86,17 +86,17 @@ if not select(1, ...) and game.PlaceId == 5938036553 then
     task.spawn(function()
       repeat
         task.wait()
-      until not getgenv().LunarVape
+      until not _G.LunarVape
       local executionString = "loadfile('Lunar Vape/main.lua')(" .. drawingactor .. ')'
-      for i, v in getgenv() do
+      for i, v in _G do
         if type(v) == 'string' then
-          executionString = string.format("getgenv().%s = '%s'", i, v) .. '\n' .. executionString
+          executionString = string.format("_G.%s = '%s'", i, v) .. '\n' .. executionString
         elseif type(v) == 'boolean' then
-          executionString = string.format('getgenv().%s = %s', i, tostring(v)) .. '\n' .. executionString
+          executionString = string.format('_G.%s = %s', i, tostring(v)) .. '\n' .. executionString
         end
       end
       if oldreload then
-        executionString = 'getgenv().LunarVapereload = true\n' .. executionString
+        executionString = '_G.LunarVapereload = true\n' .. executionString
       end
 
       for i, v in getactors() do
@@ -187,8 +187,8 @@ run(function()
     local gc = getgc(true)
     for _, v in gc do
       if type(v) == 'table' then
-        if rawget(v, 'script') and v.getgenv() and v.getgenv().append_exe_set then
-          frontlines.Main = v.getgenv()
+        if rawget(v, 'script') and v._G and v._G.append_exe_set then
+          frontlines.Main = v._G
         end
       elseif type(v) == 'function' and islclosure(v) then
         local name = debug.info(v, 'n')

@@ -14,7 +14,7 @@ local isfile = isfile
     return suc and res ~= nil and res ~= ''
   end
 local function downloadFile(path, func)
-  if not isfile(path) and not getgenv().LunarVapeDeveloper then
+  if not isfile(path) and not _G.LunarVapeDeveloper then
     local suc, res = pcall(function()
       return game:HttpGet(
         'https://raw.githubusercontent.com/AtTheZenith/LunarVape/'
@@ -66,7 +66,7 @@ local contextService = cloneref(game:GetService 'ContextActionService')
 local gameCamera = workspace.CurrentCamera
 local lplr = playersService.LocalPlayer
 
-local LunarVape = getgenv().LunarVape
+local LunarVape = _G.LunarVape
 local entitylib = LunarVape.Libraries.entity
 local prediction = LunarVape.Libraries.prediction
 local targetinfo = LunarVape.Libraries.targetinfo

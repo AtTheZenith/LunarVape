@@ -31,7 +31,7 @@ local gameCamera = workspace.CurrentCamera
 local lplr = playersService.LocalPlayer
 local assetfunction = getcustomasset
 
-local LunarVape = getgenv().LunarVape
+local LunarVape = _G.LunarVape
 local entitylib = LunarVape.Libraries.entity
 local targetinfo = LunarVape.Libraries.targetinfo
 local sessioninfo = LunarVape.Libraries.sessioninfo
