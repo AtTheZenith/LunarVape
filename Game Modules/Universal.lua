@@ -6110,6 +6110,8 @@ run(function()
 end)
 
 run(function()
+  -- TODO: Fix for new chat system
+  if true then return end -- Disabled for now, causes issues with some games
   local ChatSpammer
   local Lines
   local Mode
