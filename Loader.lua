@@ -60,6 +60,10 @@ pcall(function()
     if _G.LunarVape and _G.LunarVape.CreateNotification and string.upper(string.sub(tostring(v), 25)) == 'ERROR' then
       -- function mainapi:CreateNotification(title, text, duration, type)
 
+      if _G.LunarVape.Loaded and not string.find(m, 'Lunar Vape') then
+        return
+      end
+
       if debounce_tick(debounce2[3]) ~= debounce2[1] then
         debounce2[1] = debounce_tick(debounce2[3])
         debounce2[2] = 1
