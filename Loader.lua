@@ -3,7 +3,7 @@ pcall(function()
     return v
   end
   if _G.LunarVapeErrorLogger then
-    _G.LunarVapeErrorLogger:Disconnect()
+    pcall(function() _G.LunarVapeErrorLogger:Disconnect() end)
   end
   if _G.NoLogs then
     return
@@ -37,9 +37,42 @@ pcall(function()
   )
   writefile(name, header)
 
+  local function debounce_tick(ratio): number
+    return math.floor(tick() / (ratio or 1))
+  end
+
+  --- {debounce, count, timeWindow, maxCount}
+  local debounce1 = {debounce_tick(), 0, 1, 60}
+  local debounce2 = {debounce_tick(5), 0, 10, 3}
+
   _G.LunarVapeErrorLogger = c(game:GetService 'LogService').MessageOut:Connect(function(m, v)
-    task.wait(1)
+    task.wait() -- to prevent potential crashes from recursive logging
+    if debounce_tick() ~= debounce1[1] then
+      debounce1[1] = debounce_tick(debounce1[3])
+      debounce1[2] = 1
+    elseif debounce1[2] >= debounce1[4] then
+      return
+    else
+      debounce1[2] = debounce1[2] + 1
+    end
     appendfile(name, string.format('\n%s [%s]: %s', t(), string.upper(string.sub(tostring(v), 25)), m))
+
+    if _G.LunarVape and _G.LunarVape.CreateNotification and string.upper(string.sub(tostring(v), 25)) == 'ERROR' then
+      -- function mainapi:CreateNotification(title, text, duration, type)
+
+      if debounce_tick(debounce2[3]) ~= debounce2[1] then
+        debounce2[1] = debounce_tick(debounce2[3])
+        debounce2[2] = 1
+      elseif debounce2[2] >= debounce2[4] then
+        return
+      else
+        debounce2[2] = debounce2[2] + 1
+      end
+      
+      _G.LunarVape:CreateNotification(
+        'Lunar Vape Error', m, 5, 'alert'
+      )
+    end
   end)
 end)
 
@@ -147,4 +180,3 @@ end
 
 print 'Lunar Vape/Main.lua'
 loadstring(downloadFile 'Lunar Vape/Main.lua', 'Lunar Vape/Main.lua')()
-

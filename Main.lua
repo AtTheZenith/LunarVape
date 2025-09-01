@@ -15,16 +15,19 @@ if identifyexecutor then
 end
 
 local LunarVape
+
+
+local queue_on_teleport = queue_on_teleport or function() end
+
 local loadstring = function(script, name)
   print(name)
   local res, err = loadstring(script, name)
-  if err and LunarVape then
-    warn(err)
-    LunarVape:CreateNotification('Lunar Vape', 'Failed to load: ' .. err, 30, 'alert')
+  if err then
+    error(err)
   end
   return res
 end
-local queue_on_teleport = queue_on_teleport or function() end
+
 local isfile = isfile
   or function(file)
     local suc, res = pcall(function()
@@ -32,9 +35,11 @@ local isfile = isfile
     end)
     return suc and res ~= nil and res ~= ''
   end
+
 local cloneref = cloneref or function(obj)
   return obj
 end
+
 local playersService = cloneref(game:GetService 'Players')
 
 local function downloadFile(path, func)
@@ -48,10 +53,7 @@ local function downloadFile(path, func)
         true
       )
     end)
-    if res == '404: Not Found' then
-      warn(string.format('Error while downloading file %s: %s', path, res))
-      return false
-    elseif not suc then
+    if res == '404: Not Found' or not suc then
       error(string.format('Error while downloading file %s: %s', path, res))
       return false
     end
@@ -68,10 +70,11 @@ local function finishLoading()
   LunarVape.Init = nil
   LunarVape:Load()
   task.spawn(function()
-    repeat
+    task.wait(10)
+    while LunarVape and LunarVape.Loaded do
       LunarVape:Save()
       task.wait(10)
-    until not LunarVape or not LunarVape.Loaded
+    end
   end)
 
   local teleportedServers
@@ -142,7 +145,7 @@ if not _G.LunarVapeIndependent then
       )()
     end
   end
-  loadstring(downloadFile 'Lunar Vape/Extra/Profiles/Installer.lua', 'Lunar Vape/Extra/Profiles/Installer.lua')()
+  --loadstring(downloadFile 'Lunar Vape/Extra/Profiles/Installer.lua', 'Lunar Vape/Extra/Profiles/Installer.lua')()
   finishLoading()
 else
   LunarVape.Init = finishLoading
