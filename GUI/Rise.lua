@@ -234,7 +234,7 @@ local function createHighlight(size, pos)
 end
 
 local function downloadFile(path, func)
-  if not isfile(path) and not _G.LunarVapeDeveloper then
+  if not isfile(path) and not getgenv().LunarVapeDeveloper then
     createDownloader(path)
     local suc, res = pcall(function()
       return game:HttpGet(
@@ -350,10 +350,10 @@ end
 
 local function writeFont()
   if not assetfunction then
-    return 'rbxasset://fonts/productsans.json'
+    return 'rbxasset://fonts/productsans.txt'
   end
   writefile(
-    'Lunar Vape/Assets/Rise/risefont.json',
+    'Lunar Vape/Assets/Rise/risefont.txt',
     httpService:JSONEncode {
       name = 'ProductSans',
       faces = {
@@ -390,7 +390,7 @@ local function writeFont()
       },
     }
   )
-  return getcustomasset 'Lunar Vape/Assets/Rise/risefont.json'
+  return getcustomasset 'Lunar Vape/Assets/Rise/risefont.txt'
 end
 
 if inputService.TouchEnabled then
@@ -406,13 +406,13 @@ do
   uipallet.FontIcon1 = Font.new(risefont, Enum.FontWeight.SemiBold)
   uipallet.FontIcon3 = Font.new(risefont, Enum.FontWeight.ExtraBold)
 
-  local res = isfile 'Lunar Vape/Profiles/Color.json' and loadJson 'Lunar Vape/Profiles/Color.json'
+  local res = isfile 'Lunar Vape/Profiles/Color.txt' and loadJson 'Lunar Vape/Profiles/Color.txt'
   if res then
     uipallet.Main = res.Main and Color3.fromRGB(unpack(res.Main)) or uipallet.Main
     uipallet.Text = res.Text and Color3.fromRGB(unpack(res.Text)) or uipallet.Text
     uipallet.Font = res.Font
         and Font.new(
-          res.Font:find 'rbxasset' and res.Font or string.format('rbxasset://fonts/families/%s.json', res.Font)
+          res.Font:find 'rbxasset' and res.Font or string.format('rbxasset://fonts/families/%s.txt', res.Font)
         )
       or uipallet.Font
     uipallet.FontSemiBold = Font.new(uipallet.Font.Family, Enum.FontWeight.SemiBold)
@@ -1303,8 +1303,8 @@ components = {
           if ind then
             if val ~= 'Main Configuration' then
               table.remove(mainapi.Profiles, ind)
-              if isfile('Lunar Vape/Profiles/' .. val .. ' ' .. mainapi.Place .. '.json') and delfile then
-                delfile('Lunar Vape/Profiles/' .. val .. ' ' .. mainapi.Place .. '.json')
+              if isfile('Lunar Vape/Profiles/' .. val .. ' ' .. mainapi.Place .. '.txt') and delfile then
+                delfile('Lunar Vape/Profiles/' .. val .. ' ' .. mainapi.Place .. '.txt')
               end
             end
           else
@@ -2449,8 +2449,8 @@ function mainapi:Load(skipgui, profile)
   local guidata = {}
   local savecheck = true
 
-  if isfile('Lunar Vape/Profiles/' .. game.GameId .. ' GUI Settings.json') then
-    guidata = loadJson('Lunar Vape/Profiles/' .. game.GameId .. ' GUI Settings.json')
+  if isfile('Lunar Vape/Profiles/' .. game.GameId .. ' GUI Settings.txt') then
+    guidata = loadJson('Lunar Vape/Profiles/' .. game.GameId .. ' GUI Settings.txt')
     if not guidata then
       guidata = { Categories = {} }
       self:CreateNotification('Lunar Vape', 'Failed to load GUI settings.', 10, 'alert')
@@ -2481,8 +2481,8 @@ function mainapi:Load(skipgui, profile)
   } }
   --self.Categories.Profiles:ChangeValue()
 
-  if isfile('Lunar Vape/Profiles/' .. self.Profile .. ' ' .. self.Place .. '.json') then
-    local savedata = loadJson('Lunar Vape/Profiles/' .. self.Profile .. ' ' .. self.Place .. '.json')
+  if isfile('Lunar Vape/Profiles/' .. self.Profile .. ' ' .. self.Place .. '.txt') then
+    local savedata = loadJson('Lunar Vape/Profiles/' .. self.Profile .. ' ' .. self.Place .. '.txt')
     if not savedata then
       savedata = {
         Categories = {},
@@ -2615,8 +2615,8 @@ function mainapi:Save(newprofile)
     }
   end
 
-  writefile('Lunar Vape/Profiles/' .. game.GameId .. ' GUI Settings.json', httpService:JSONEncode(guidata))
-  writefile('Lunar Vape/Profiles/' .. self.Profile .. ' ' .. self.Place .. '.json', httpService:JSONEncode(savedata))
+  writefile('Lunar Vape/Profiles/' .. game.GameId .. ' GUI Settings.txt', httpService:JSONEncode(guidata))
+  writefile('Lunar Vape/Profiles/' .. self.Profile .. ' ' .. self.Place .. '.txt', httpService:JSONEncode(savedata))
 end
 
 function mainapi:SaveOptions(object, savedoptions)
@@ -2666,9 +2666,9 @@ function mainapi:Uninject()
   mainapi.gui:Destroy()
   table.clear(mainapi.Libraries)
   loopClean(mainapi)
-  _G.LunarVape = nil
-  _G.LunarVapereload = nil
-  _G.LunarVapeIndependent = nil
+  getgenv().LunarVape = nil
+  getgenv().LunarVapereload = nil
+  getgenv().LunarVapeIndependent = nil
 end
 
 gui = Instance.new 'ScreenGui'
@@ -3011,8 +3011,8 @@ mainapi.Categories.Main:CreateDropdown {
   Function = function(val, mouse)
     if mouse then
       writefile('Lunar Vape/Profiles/GUI.txt', val)
-      _G.LunarVapereload = true
-      if _G.LunarVapeDeveloper then
+      getgenv().LunarVapereload = true
+      if getgenv().LunarVapeDeveloper then
         loadstring(readfile 'Lunar Vape/Loader.lua', 'Lunar Vape/Loader.lua')()
       else
         loadstring(
@@ -3047,8 +3047,8 @@ mainapi.RainbowUpdateSpeed = mainapi.Categories.Main:CreateSlider {
 mainapi.Categories.Main:CreateButton {
   Name = 'Reinject',
   Function = function()
-    _G.LunarVapereload = true
-    if _G.LunarVapeDeveloper then
+    getgenv().LunarVapereload = true
+    if getgenv().LunarVapeDeveloper then
       loadstring(readfile 'Lunar Vape/Loader.lua', 'Lunar Vape/Loader.lua')()
     else
       loadstring(

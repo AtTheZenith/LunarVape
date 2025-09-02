@@ -20,7 +20,7 @@ local coreGui = cloneref(game:GetService 'CoreGui')
 local gameCamera = workspace.CurrentCamera
 local lplr = playersService.LocalPlayer
 
-local LunarVape = _G.LunarVape
+local LunarVape = getgenv().LunarVape
 local sessioninfo = LunarVape.Libraries.sessioninfo
 
 run(function()

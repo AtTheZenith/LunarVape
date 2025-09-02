@@ -75,7 +75,7 @@ local getfontsize = function(text, size, font)
 end
 
 local function downloadFile(path, func)
-  if not isfile(path) and not _G.LunarVapeDeveloper then
+  if not isfile(path) and not getgenv().LunarVapeDeveloper then
     local suc, res = pcall(function()
       return game:HttpGet(
         'https://raw.githubusercontent.com/AtTheZenith/LunarVape/'
@@ -193,13 +193,13 @@ local function removeTags(str)
 end
 
 do
-  local res = isfile 'Lunar Vape/Profiles/Color.json' and loadJson 'Lunar Vape/Profiles/Color.json'
+  local res = isfile 'Lunar Vape/Profiles/Color.txt' and loadJson 'Lunar Vape/Profiles/Color.txt'
   if res then
     uipallet.Main = res.Main and Color3.fromRGB(unpack(res.Main)) or uipallet.Main
     uipallet.Text = res.Text and Color3.fromRGB(unpack(res.Text)) or uipallet.Text
     uipallet.Font = res.Font
         and Font.new(
-          res.Font:find 'rbxasset' and res.Font or string.format('rbxasset://fonts/families/%s.json', res.Font)
+          res.Font:find 'rbxasset' and res.Font or string.format('rbxasset://fonts/families/%s.txt', res.Font)
         )
       or uipallet.Font
     uipallet.FontSemiBold = Font.new(uipallet.Font.Family, Enum.FontWeight.SemiBold)

@@ -1,8 +1,8 @@
 repeat
   task.wait()
 until game:IsLoaded()
-if _G.LunarVape then
-  _G.LunarVape:Uninject()
+if getgenv().LunarVape then
+  getgenv().LunarVape:Uninject()
 end
 
 if identifyexecutor then
@@ -43,7 +43,7 @@ end
 local playersService = cloneref(game:GetService 'Players')
 
 local function downloadFile(path, func)
-  if not isfile(path) and not _G.LunarVapeDeveloper then
+  if not isfile(path) and not getgenv().LunarVapeDeveloper then
     local suc, res = pcall(function()
       return game:HttpGet(
         'https://raw.githubusercontent.com/AtTheZenith/LunarVape/'
@@ -78,23 +78,23 @@ local function finishLoading()
   end)
 
   local teleportedServers
-  if _G.ReloadOnJoin == true or isfile 'Lunar Vape/LoadOnRejoin' or isfile 'Lunar Vape/LoadOnRejoin.txt' then
+  if getgenv().ReloadOnJoin == true or isfile 'Lunar Vape/LoadOnRejoin' or isfile 'Lunar Vape/LoadOnRejoin.txt' then
     LunarVape:Clean(playersService.LocalPlayer.OnTeleport:Connect(function()
-      if (not teleportedServers) and not _G.LunarVapeIndependent then
+      if (not teleportedServers) and not getgenv().LunarVapeIndependent then
         teleportedServers = true
         local teleportScript = [[
-        _G.ReloadOnJoin = true
-        if _G.LunarVapeDeveloper then
+        getgenv().ReloadOnJoin = true
+        if getgenv().LunarVapeDeveloper then
           loadstring(readfile('Lunar Vape/Loader.lua'), 'Lunar Vape/Loader.lua')()
         else
           loadstring(game:HttpGet('https://raw.githubusercontent.com/AtTheZenith/LunarVape/main/Loader.lua', true), 'Lunar Vape/Loader.lua')()
         end
         ]]
-        if _G.LunarVapeDeveloper then
-          teleportScript = '_G.LunarVapeDeveloper = true\n' .. teleportScript
+        if getgenv().LunarVapeDeveloper then
+          teleportScript = 'getgenv().LunarVapeDeveloper = true\n' .. teleportScript
         end
-        if _G.LunarVapeCustomProfile then
-          teleportScript = '_G.LunarVapeCustomProfile = "' .. _G.LunarVapeCustomProfile .. '"\n' .. teleportScript
+        if getgenv().LunarVapeCustomProfile then
+          teleportScript = 'getgenv().LunarVapeCustomProfile = "' .. getgenv().LunarVapeCustomProfile .. '"\n' .. teleportScript
         end
         LunarVape:Save()
         queue_on_teleport(teleportScript)
@@ -120,7 +120,7 @@ if not isfolder('Lunar Vape/Assets/' .. gui) then
 end
 
 LunarVape = loadstring(downloadFile('Lunar Vape/GUI/' .. gui .. '.lua'), 'Lunar Vape/GUI/' .. gui .. '.lua')()
-_G.LunarVape = LunarVape
+getgenv().LunarVape = LunarVape
 
 LunarVape.Place = game.PlaceId
 local GAME_REGISTRY =
@@ -129,7 +129,7 @@ local GAME_NAME = if GAME_REGISTRY[tostring(LunarVape.Place)]
   then ' ' .. GAME_REGISTRY[tostring(LunarVape.Place)]
   else false
 
-if not _G.LunarVapeIndependent then
+if not getgenv().LunarVapeIndependent then
   loadstring(downloadFile 'Lunar Vape/Game Modules/Universal.lua', 'Lunar Vape/Game Modules/Universal.lua')()
   if GAME_NAME and isfile('Lunar Vape/Game Modules/' .. LunarVape.Place .. GAME_NAME .. '.lua') then
     loadstring(
@@ -137,7 +137,7 @@ if not _G.LunarVapeIndependent then
       tostring('Lunar Vape/Game Modules/' .. LunarVape.Place .. GAME_NAME .. '.lua')
     )()
   else
-    if not _G.LunarVapeDeveloper and GAME_NAME then
+    if not getgenv().LunarVapeDeveloper and GAME_NAME then
       downloadFile('Lunar Vape/Game Modules/' .. LunarVape.Place .. GAME_NAME .. '.lua')
       loadstring(
         readfile('Lunar Vape/Game Modules/' .. LunarVape.Place .. GAME_NAME .. '.lua'),
@@ -145,7 +145,7 @@ if not _G.LunarVapeIndependent then
       )()
     end
   end
-  --loadstring(downloadFile 'Lunar Vape/Extra/Profiles/Installer.lua', 'Lunar Vape/Extra/Profiles/Installer.lua')()
+  loadstring(downloadFile 'Lunar Vape/Extra/Profiles/Installer.lua', 'Lunar Vape/Extra/Profiles/Installer.lua')()
   finishLoading()
 else
   LunarVape.Init = finishLoading

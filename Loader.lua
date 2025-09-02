@@ -2,12 +2,8 @@ pcall(function()
   local c = cloneref or function(v)
     return v
   end
-  if _G.LunarVapeErrorLogger then
-    pcall(function() _G.LunarVapeErrorLogger:Disconnect() end)
-  end
-  if _G.NoLogs then
-    return
-  end
+  if getgenv().LunarVapeErrorLogger then return end
+  if getgenv().NoLogs then return end
 
   local function t(ymd)
     local t = tick()
@@ -45,7 +41,7 @@ pcall(function()
   local debounce1 = {debounce_tick(), 0, 1, 60}
   local debounce2 = {debounce_tick(5), 0, 10, 3}
 
-  _G.LunarVapeErrorLogger = c(game:GetService 'LogService').MessageOut:Connect(function(m, v)
+  getgenv().LunarVapeErrorLogger = c(game:GetService 'LogService').MessageOut:Connect(function(m, v)
     task.wait() -- to prevent potential crashes from recursive logging
     if debounce_tick() ~= debounce1[1] then
       debounce1[1] = debounce_tick(debounce1[3])
@@ -57,10 +53,10 @@ pcall(function()
     end
     appendfile(name, string.format('\n%s [%s]: %s', t(), string.upper(string.sub(tostring(v), 25)), m))
 
-    if _G.LunarVape and _G.LunarVape.CreateNotification and string.upper(string.sub(tostring(v), 25)) == 'ERROR' then
+    if getgenv().LunarVape and getgenv().LunarVape.CreateNotification and string.upper(string.sub(tostring(v), 25)) == 'ERROR' then
       -- function mainapi:CreateNotification(title, text, duration, type)
 
-      if _G.LunarVape.Loaded and not string.find(m, 'Lunar Vape') then
+      if getgenv().LunarVape.Loaded and not string.find(m, 'Lunar Vape') then
         return
       end
 
@@ -73,7 +69,7 @@ pcall(function()
         debounce2[2] = debounce2[2] + 1
       end
       
-      _G.LunarVape:CreateNotification(
+      getgenv().LunarVape:CreateNotification(
         'Lunar Vape Error', m, 5, 'alert'
       )
     end
@@ -95,7 +91,7 @@ local delfile = delfile or function(file)
 end
 
 local function downloadFile(path, func)
-  if not isfile(path) and not _G.LunarVapeDeveloper then
+  if not isfile(path) and not getgenv().LunarVapeDeveloper then
     local suc, res = pcall(function()
       return game:HttpGet(
         'https://raw.githubusercontent.com/AtTheZenith/LunarVape/'
@@ -162,7 +158,7 @@ for _, folder in folders do
   end
 end
 
-if not _G.LunarVapeDeveloper then
+if not getgenv().LunarVapeDeveloper then
   local _, subbed = pcall(function()
     return game:HttpGet 'https://github.com/AtTheZenith/LunarVape'
   end)

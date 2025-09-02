@@ -26,6 +26,7 @@ local contextActionService = cloneref(game:GetService('ContextActionService'))
 local guiService = cloneref(game:GetService('GuiService'))
 local coreGui = cloneref(game:GetService('CoreGui'))
 local starterGui = cloneref(game:GetService('StarterGui'))
+local logService = cloneref(game:GetService('LogService'))
 
 local isnetworkowner = isnetworkowner or function(): boolean return true end
 local assetfunction = getcustomasset
@@ -34,7 +35,7 @@ local clonefunction = clonefunction or function<T>(T): T return T end
 local gameCamera = workspace.CurrentCamera
 local lplr = playersService.LocalPlayer
 
-local LunarVape = _G.LunarVape
+local LunarVape = getgenv().LunarVape
 local entitylib = LunarVape.Libraries.entity
 local targetinfo = LunarVape.Libraries.targetinfo
 local sessioninfo = LunarVape.Libraries.sessioninfo
@@ -2067,6 +2068,7 @@ run(function()
 	local Limit
 	local LegitAura
 	local Particles, Boxes = {}, {}
+  local FixConnection
 	local anims, AnimDelay, AnimTween, armC0 = LunarVape.Libraries.auraanims, tick()
 	local AttackRemote = {FireServer = function() end}
 	task.spawn(function()
@@ -2101,6 +2103,13 @@ run(function()
 		Name = 'Killaura',
 		Function = function(callback)
 			if callback then
+        FixConnection = logService.MessageOut:Connect(function(m)
+          if m:find('sword-controller:441:') then
+            Killaura:Toggle()
+            Killaura:Toggle()
+          end
+        end)
+
         if LunarVape.Modules.AutoCharge and LunarVape.Modules.AutoCharge.Enabled then
           LunarVape.Modules.AutoCharge:Toggle()
         end
@@ -2276,6 +2285,10 @@ run(function()
 					task.wait(1 / UpdateRate.Value)
 				until not Killaura.Enabled
 			else
+        if FixConnection then
+          FixConnection:Disconnect()
+          FixConnection = nil
+        end
 				store.KillauraTarget = nil
 				for _, v in Boxes do
 					v.Adornee = nil
@@ -7516,7 +7529,7 @@ run(function()
       vmmodelweld.Part1 = child.Handle
       -- third person txtpack renderer
       local charmodel = v1:Clone()
-      charmodel.CFrame = playersService.LocalPlayer.Character[child.Name]:FindFirstChild("Handle").CFrame
+      charmodel.CFrame = lplr.Character[child.Name]:FindFirstChild("Handle").CFrame
       charmodel.CFrame = charmodel.CFrame * (packDropdown.Value == "OG Pack" and CFrame.new(0, -0.5, 0) or packDropdown.Value == "Melo's Pack" and CFrame.new(0.2, -0.9, 0) or packDropdown.Value == "4zze's Pack" and CFrame.new(0.1,-1.2,0)) * CFrame.Angles(math.rad(90),math.rad(-130),math.rad(0))
       if string.lower(child.Name) == "rageblade" then charmodel.CFrame = charmodel.CFrame * CFrame.Angles(math.rad(-180),math.rad(100),math.rad(0)) * CFrame.new(0.8,0,-1.1) end
       if string.lower(child.Name):find("pickaxe") then charmodel.CFrame = charmodel.CFrame * CFrame.Angles(math.rad(-55),math.rad(-30),math.rad(50)) * CFrame.new(-0.8,-0.2,1.1) end

@@ -1,4 +1,4 @@
 return {
-  '4124008017 GUI Settings.json',
-  'Main Configuration 11630038968.json',
+  '4124008017 GUI Settings.txt',
+  'Main Configuration 11630038968.txt',
 }

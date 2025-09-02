@@ -19,7 +19,7 @@ local mainapi = {
   Scale = { Value = 1 },
   ThreadFix = setthreadidentity and getthreadidentity and true or false,
   ToggleNotifications = {},
-  Version = 'v2.5.1',
+  Version = 'v2.5.2',
   Windows = {},
 }
 
@@ -313,7 +313,7 @@ local function createMobileButton(buttonapi, position)
 end
 
 local function downloadFile(path, func)
-  if not isfile(path) and not _G.LunarVapeDeveloper then
+  if not isfile(path) and not getgenv().LunarVapeDeveloper then
     createDownloader(path)
     local suc, res = pcall(function()
       return game:HttpGet(
@@ -435,13 +435,13 @@ local function removeTags(str)
 end
 
 do
-  local res = isfile 'Lunar Vape/Profiles/Color.json' and loadJson 'Lunar Vape/Profiles/Color.json'
+  local res = isfile 'Lunar Vape/Profiles/Color.txt' and loadJson 'Lunar Vape/Profiles/Color.txt'
   if res then
     uipallet.Main = res.Main and Color3.fromRGB(unpack(res.Main)) or uipallet.Main
     uipallet.Text = res.Text and Color3.fromRGB(unpack(res.Text)) or uipallet.Text
     uipallet.Font = res.Font
         and Font.new(
-          res.Font:find 'rbxasset' and res.Font or string.format('rbxasset://fonts/families/%s.json', res.Font)
+          res.Font:find 'rbxasset' and res.Font or string.format('rbxasset://fonts/families/%s.txt', res.Font)
         )
       or uipallet.Font
     uipallet.FontSemiBold = Font.new(uipallet.Font.Family, Enum.FontWeight.SemiBold)
@@ -4625,8 +4625,8 @@ function mainapi:CreateCategoryList(categorysettings)
         if ind then
           if val ~= 'Main Configuration' then
             table.remove(mainapi.Profiles, ind)
-            if isfile('Lunar Vape/Profiles/' .. val .. ' ' .. mainapi.Place .. '.json') and delfile then
-              delfile('Lunar Vape/Profiles/' .. val .. ' ' .. mainapi.Place .. '.json')
+            if isfile('Lunar Vape/Profiles/' .. val .. ' ' .. mainapi.Place .. '.txt') and delfile then
+              delfile('Lunar Vape/Profiles/' .. val .. ' ' .. mainapi.Place .. '.txt')
             end
           end
         else
@@ -5602,8 +5602,8 @@ function mainapi:Load(skipgui, profile)
   local guidata = {}
   local savecheck = true
 
-  if isfile('Lunar Vape/Profiles/' .. game.GameId .. ' GUI Settings.json') then
-    guidata = loadJson('Lunar Vape/Profiles/' .. game.GameId .. ' GUI Settings.json')
+  if isfile('Lunar Vape/Profiles/' .. game.GameId .. ' GUI Settings.txt') then
+    guidata = loadJson('Lunar Vape/Profiles/' .. game.GameId .. ' GUI Settings.txt')
     if not guidata then
       guidata = { Categories = {} }
       self:CreateNotification('Lunar Vape', 'Failed to load GUI settings.', 10, 'alert')
@@ -5655,8 +5655,8 @@ function mainapi:Load(skipgui, profile)
     )
   end
 
-  if isfile('Lunar Vape/Profiles/' .. self.Profile .. ' ' .. self.Place .. '.json') then
-    local savedata = loadJson('Lunar Vape/Profiles/' .. self.Profile .. ' ' .. self.Place .. '.json')
+  if isfile('Lunar Vape/Profiles/' .. self.Profile .. ' ' .. self.Place .. '.txt') then
+    local savedata = loadJson('Lunar Vape/Profiles/' .. self.Profile .. ' ' .. self.Place .. '.txt')
     if not savedata then
       savedata = { Categories = {}, Modules = {}, Legit = {} }
       self:CreateNotification('Lunar Vape', 'Failed to load ' .. self.Profile .. ' profile.', 10, 'alert')
@@ -5783,7 +5783,7 @@ function mainapi:Load(skipgui, profile)
     tooltip.Visible = false
     self:BlurCheck()
   end)
-  if _G.HideLunarVape then
+  if getgenv().HideLunarVape then
     button.Visible = false
   end
 end
@@ -5865,8 +5865,8 @@ function mainapi:Save(newprofile)
     }
   end
 
-  writefile('Lunar Vape/Profiles/' .. game.GameId .. ' GUI Settings.json', httpService:JSONEncode(guidata))
-  writefile('Lunar Vape/Profiles/' .. self.Profile .. ' ' .. self.Place .. '.json', httpService:JSONEncode(savedata))
+  writefile('Lunar Vape/Profiles/' .. game.GameId .. ' GUI Settings.txt', httpService:JSONEncode(guidata))
+  writefile('Lunar Vape/Profiles/' .. self.Profile .. ' ' .. self.Place .. '.txt', httpService:JSONEncode(savedata))
 end
 
 function mainapi:SaveOptions(object, savedoptions)
@@ -5915,11 +5915,12 @@ function mainapi:Uninject()
   mainapi.gui:Destroy()
   table.clear(mainapi.Libraries)
   loopClean(mainapi)
-  _G.LunarVape = nil
-  _G.LunarVapereload = nil
-  _G.LunarVapeIndependent = nil
-  if _G.LunarVapeErrorLogger then
-    _G.LunarVapeErrorLogger:Disconnect()
+  getgenv().LunarVape = nil
+  getgenv().LunarVapereload = nil
+  getgenv().LunarVapeIndependent = nil
+  if getgenv().LunarVapeErrorLogger then
+    getgenv().LunarVapeErrorLogger:Disconnect()
+    getgenv().LunarVapeErrorLogger = nil
   end
 end
 
@@ -6169,11 +6170,11 @@ general:CreateButton {
   Name = 'Reset current profile',
   Function = function()
     mainapi.Save = function() end
-    if isfile('Lunar Vape/Profiles/' .. mainapi.Profile .. mainapi.Place .. '.json') and delfile then
-      delfile('Lunar Vape/Profiles/' .. mainapi.Profile .. mainapi.Place .. '.json')
+    if isfile('Lunar Vape/Profiles/' .. mainapi.Profile .. mainapi.Place .. '.txt') and delfile then
+      delfile('Lunar Vape/Profiles/' .. mainapi.Profile .. mainapi.Place .. '.txt')
     end
-    _G.LunarVapereload = true
-    if _G.LunarVapeDeveloper then
+    getgenv().LunarVapereload = true
+    if getgenv().LunarVapeDeveloper then
       loadstring(readfile 'Lunar Vape/Loader.lua', 'Lunar Vape/Loader.lua')()
     else
       loadstring(
@@ -6199,8 +6200,8 @@ general:CreateButton {
 general:CreateButton {
   Name = 'Reinject',
   Function = function()
-    _G.LunarVapereload = true
-    if _G.LunarVapeDeveloper then
+    getgenv().LunarVapereload = true
+    if getgenv().LunarVapeDeveloper then
       loadstring(readfile 'Lunar Vape/Loader.lua', 'Lunar Vape/Loader.lua')()
     else
       loadstring(
@@ -6315,8 +6316,8 @@ guipane:CreateDropdown {
   Function = function(val, mouse)
     if mouse then
       writefile('Lunar Vape/Profiles/GUI.txt', val)
-      _G.LunarVapereload = true
-      if _G.LunarVapeDeveloper then
+      getgenv().LunarVapereload = true
+      if getgenv().LunarVapeDeveloper then
         loadstring(readfile 'Lunar Vape/Loader.lua', 'Lunar Vape/Loader.lua')()
       else
         loadstring(

@@ -1,4 +1,4 @@
-local LunarVape = shared.LunarVape or getgenv().LunarVape or _G.LunarVape
+local LunarVape = shared.LunarVape or getgenv().LunarVape or getgenv().LunarVape
 
 local run = function(blacklist, func)
   if type(blacklist) == 'function' then
