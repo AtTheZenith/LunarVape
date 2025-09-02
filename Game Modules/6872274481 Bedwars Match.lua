@@ -36,15 +36,24 @@ local gameCamera = workspace.CurrentCamera
 local lplr = playersService.LocalPlayer
 
 local LunarVape = getgenv().LunarVape
-local entitylib = LunarVape.Libraries.entity
-local targetinfo = LunarVape.Libraries.targetinfo
-local sessioninfo = LunarVape.Libraries.sessioninfo
-local uipallet = LunarVape.Libraries.uipallet
-local tween = LunarVape.Libraries.tween
-local color = LunarVape.Libraries.color
-local prediction = LunarVape.Libraries.prediction
-local getfontsize = LunarVape.Libraries.getfontsize
-local getcustomasset = LunarVape.Libraries.getcustomasset
+local function getlib(lib, default)
+  local ok, result = pcall(function() return LunarVape.Libraries[lib] end)
+  if ok and result then
+    return result
+  else
+    return default or {}
+  end
+end
+-- getlib is stupid but i need to help delta users
+local entitylib = getlib("entity", {})
+local targetinfo = getlib("targetinfo", {})
+local sessioninfo = getlib("sessioninfo", {})
+local uipallet = getlib("uipallet", {})
+local tween = getlib("tween", {})
+local color = getlib("color", {})
+local prediction = getlib("prediction", {})
+local getfontsize = getlib("getfontsize", function() return Vector2.zero end)
+local getcustomasset = getlib("getcustomasset", function() return "" end)
 
 local store = {
   attackReach = 0,

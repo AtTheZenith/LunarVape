@@ -19,7 +19,8 @@ local LunarVape
 
 local queue_on_teleport = queue_on_teleport or function() end
 
-local loadstring = function(script, name)
+-- test fix for hydrogen lol
+local loadstring = identifyexecutor() == 'Hyrdrogen' and loadstring or function(script, name)
   print(name)
   local res, err = loadstring(script, name)
   if err then
@@ -119,8 +120,9 @@ if not isfolder('Lunar Vape/Assets/' .. gui) then
   makefolder('Lunar Vape/Assets/' .. gui)
 end
 
-LunarVape = loadstring(downloadFile('Lunar Vape/GUI/' .. gui .. '.lua'), 'Lunar Vape/GUI/' .. gui .. '.lua')()
-getgenv().LunarVape = LunarVape
+-- retarded solution in attempt to fix hydrogen
+loadstring(downloadFile('Lunar Vape/GUI/' .. gui .. '.lua'), 'Lunar Vape/GUI/' .. gui .. '.lua')()
+LunarVape = getgenv().LunarVape
 
 LunarVape.Place = game.PlaceId
 local GAME_REGISTRY =

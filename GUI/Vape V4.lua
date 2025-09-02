@@ -7355,4 +7355,5 @@ mainapi:Clean(inputService.InputEnded:Connect(function(inputObj)
   end
 end))
 
-return mainapi
+-- return mainapi
+getgenv().LunarVape = mainapi
