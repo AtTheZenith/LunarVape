@@ -271,7 +271,7 @@ local function createDownloader(text)
   end
 end
 
-local function createMobileButton(buttonapi, position)
+local function createMenuButton(buttonapi, position)
   local heldbutton = false
   local button = Instance.new 'TextButton'
   button.Size = UDim2.fromOffset(40, 40)
@@ -340,7 +340,7 @@ local function downloadFile(path, func)
   return (func or readfile)(path)
 end
 
-getcustomasset = not inputService.TouchEnabled
+getcustomasset = not (inputService.TouchEnabled or identifyexecutor() == 'Velocity')
     and assetfunction
     and (not table.find({ [[place executor name in this table, luna fixed getcustomasset]] }, (identifyexecutor())))
     and function(path)
@@ -4028,7 +4028,7 @@ function mainapi:CreateCategory(categorysettings)
 
     function moduleapi:SetBind(tab, mouse)
       if tab.Mobile then
-        createMobileButton(moduleapi, Vector2.new(tab.X, tab.Y))
+        createMenuButton(moduleapi, Vector2.new(tab.X, tab.Y))
         return
       end
 
@@ -4174,7 +4174,7 @@ function mainapi:CreateCategory(categorysettings)
               if mainapi.ThreadFix then
                 setthreadidentity(8)
               end
-              createMobileButton(moduleapi, inputType.Position + Vector3.new(0, guiService:GetGuiInset().Y, 0))
+              createMenuButton(moduleapi, inputType.Position + Vector3.new(0, guiService:GetGuiInset().Y, 0))
               clickgui.Visible = true
               mainapi:BlurCheck()
               for _, mobileButton in mainapi.Modules do
