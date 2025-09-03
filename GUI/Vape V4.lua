@@ -314,17 +314,16 @@ end
 
 local function downloadFile(path, func)
   if not isfile(path) and not getgenv().LunarVapeDeveloper then
-    createDownloader(path)
     local suc, res = pcall(function()
       return game:HttpGet(
-        'https://raw.githubusercontent.com/AtTheZenith/LunarVape/'
-          .. readfile 'Lunar Vape/Profiles/Commit.txt'
+        ('https://raw.githubusercontent.com/AtTheZenith/LunarVape/'
+          .. (isfile 'Lunar Vape/Profiles/commit.txt' and readfile 'Lunar Vape/Profiles/commit.txt' or 'main')
           .. '/'
-          .. select(1, path:gsub('Lunar Vape/', '')),
+          .. (string.gsub(path, 'Lunar Vape/', ''))):gsub(' ', '%%20'),
         true
       )
     end)
-    if res == '404: Not Found' then
+    if res == '404: Not Found' or res == '' then
       warn(string.format('Error while downloading file %s: %s', path, res))
       return
     elseif not suc then
@@ -332,7 +331,7 @@ local function downloadFile(path, func)
       return
     end
     if path:find '.lua' then
-      res = '--This watermark is used to delete the file if its cached, remove it to make the file persist after LunarVape updates.\n'
+      res = '--This watermark is used to delete the file if its cached, remove it to make the file persist after Lunar Vape updates.\n'
         .. res
     end
     writefile(path, res)
@@ -340,7 +339,7 @@ local function downloadFile(path, func)
   return (func or readfile)(path)
 end
 
-getcustomasset = not (inputService.TouchEnabled or identifyexecutor() == 'Velocity')
+getcustomasset = not inputService.TouchEnabled -- INSERT EXECUTOR NAME BELOW
     and assetfunction
     and (not table.find({ [[place executor name in this table, luna fixed getcustomasset]] }, (identifyexecutor())))
     and function(path)

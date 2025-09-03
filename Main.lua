@@ -47,10 +47,10 @@ local function downloadFile(path, func)
   if not isfile(path) and not getgenv().LunarVapeDeveloper then
     local suc, res = pcall(function()
       return game:HttpGet(
-        'https://raw.githubusercontent.com/AtTheZenith/LunarVape/'
-          .. readfile 'Lunar Vape/Profiles/Commit.txt'
+        ('https://raw.githubusercontent.com/AtTheZenith/LunarVape/'
+          .. (isfile 'Lunar Vape/Profiles/commit.txt' and readfile 'Lunar Vape/Profiles/commit.txt' or 'main')
           .. '/'
-          .. select(1, path:gsub('Lunar Vape/', '')),
+          .. (string.gsub(path, 'Lunar Vape/', ''))):gsub(' ', '%%20'),
         true
       )
     end)

@@ -18,18 +18,19 @@ local function downloadFile(path, func)
   if not isfile(path) and not getgenv().LunarVapeDeveloper then
     local suc, res = pcall(function()
       return game:HttpGet(
-        'https://raw.githubusercontent.com/AtTheZenith/LunarVape/'
-          .. readfile 'Lunar Vape/Profiles/Commit.txt'
+        ('https://raw.githubusercontent.com/AtTheZenith/LunarVape/'
+          .. (isfile 'Lunar Vape/Profiles/commit.txt' and readfile 'Lunar Vape/Profiles/commit.txt' or 'main')
           .. '/'
-          .. select(1, path:gsub('Lunar Vape/', '')),
+          .. (string.gsub(path, 'Lunar Vape/', ''))):gsub(' ', '%%20'),
         true
       )
     end)
-    if not suc or res == '404: Not Found' then
-      error(res)
+    if res == '404: Not Found' or not suc then
+      error(string.format('Error while downloading file %s: %s', path, res))
+      return false
     end
     if path:find '.lua' then
-      res = '--This watermark is used to delete the file if its cached, remove it to make the file persist after LunarVape updates.\n'
+      res = '--This watermark is used to delete the file if its cached, remove it to make the file persist after Lunar Vape updates.\n'
         .. res
     end
     writefile(path, res)
