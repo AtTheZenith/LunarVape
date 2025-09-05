@@ -8056,7 +8056,7 @@ run(function()
           label.Text = math.floor(
             tonumber(game:GetService('Stats'):FindFirstChild('PerformanceStats').Memory:GetValue())
           ) .. ' MB'
-          task.wait(1)
+          task.wait(0.2)
         until not Memory.Enabled
       end
     end,
@@ -8113,7 +8113,6 @@ run(function()
 
           local t = math.clamp(d2 * 60 + d1 * 2.2, 0, 25)
           curr = curr + (t - curr) * 0.2
-          if not blur then conn:Disconnect(); return end
           blur.Size = curr
 
           lastdir, lastpos = gameCamera.CFrame.LookVector, gameCamera.CFrame.Position
@@ -8124,7 +8123,7 @@ run(function()
           blur = nil
         end
         if conn then
-          conn:Destroy()
+          conn:Disconnect()
           conn = nil
         end
         curr = 0
