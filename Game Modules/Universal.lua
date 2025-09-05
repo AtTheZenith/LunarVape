@@ -6828,9 +6828,8 @@ run(function()
 end)
 
 run(function()
-  local InfiniteJump = { Enabled = false }
-  local JumpConnections = {}
-  local Debounce = { Enabled = false }
+  local InfiniteJump
+  local Debounce 
   local DebounceTick = os.clock()
   local h = false
 
@@ -6855,31 +6854,23 @@ run(function()
     Tooltip = 'Allows you to jump mid-air.',
     Function = function(callback)
       if callback then
-        table.insert(JumpConnections, inputService.JumpRequest:Connect(jumpFunction))
+        InfiniteJump:Clean(inputService.JumpRequest:Connect(jumpFunction))
         if inputService.TouchEnabled then
           task.spawn(function()
             local j =
               lplr.PlayerGui:WaitForChild('TouchGui'):WaitForChild('TouchControlFrame'):WaitForChild 'JumpButton'
-            table.insert(
-              JumpConnections,
+            InfiniteJump:Clean(
               j.MouseButton1Down:Connect(function()
                 h = true
                 jumpFunction(true)
               end)
             )
-            table.insert(
-              JumpConnections,
+            InfiniteJump:Clean(
               j.MouseButton1Up:Connect(function()
                 h = false
               end)
             )
           end)
-        end
-      else
-        for _, Con in JumpConnections do
-          if Con and Con.Disconnect then
-            Con:Disconnect()
-          end
         end
       end
     end,
@@ -7822,7 +7813,6 @@ run(function()
     Source: https://devforum.roblox.com/t/get-client-FPS-trough-a-script/282631
   ]] -- 💀 are you sped xylex?
   local FPS
-  local conn
   local label
 
   FPS = LunarVape.Legit:CreateModule {
@@ -7844,15 +7834,10 @@ run(function()
         --       .. ' FPS'
         --   end
         -- end))
-        conn = runService.RenderStepped:Connect(function(d)
+        FPS:Clean(runService.RenderStepped:Connect(function(d)
           local fps = math.floor(1 / d)
           label.Text = fps .. ' FPS'
-        end)
-      else
-        if conn then
-          conn:Disconnect()
-          conn = nil
-        end
+        end))
       end
     end,
     Size = UDim2.fromOffset(100, 41),
@@ -8095,19 +8080,17 @@ end)
 
 run(function()
   local MotionBlur
-  local blur
-  local conn
-  local curr = 0
   MotionBlur = LunarVape.Legit:CreateModule {
     Name = 'Motion Blur',
     Function = function(callback)
       if callback then
-        blur = Instance.new 'BlurEffect'
+        local blur = Instance.new 'BlurEffect'
         blur.Name = 'MotionBlur'
         blur.Parent = gameCamera
-        local lastpos, lastdir, cur = gameCamera.CFrame.Position, gameCamera.CFrame.LookVector, 0
+        MotionBlur:Clean(blur)
+        local lastpos, lastdir, curr = gameCamera.CFrame.Position, gameCamera.CFrame.LookVector, 0
 
-        conn = runService.PreRender:Connect(function()
+        MotionBlur:Clean(runService.PreRender:Connect(function()
           local d1 = (gameCamera.CFrame.Position - lastpos).Magnitude
           local d2 = (gameCamera.CFrame.LookVector - lastdir).Magnitude
 
@@ -8116,17 +8099,7 @@ run(function()
           blur.Size = curr
 
           lastdir, lastpos = gameCamera.CFrame.LookVector, gameCamera.CFrame.Position
-        end)
-      else
-        if blur then
-          blur:Destroy()
-          blur = nil
-        end
-        if conn then
-          conn:Disconnect()
-          conn = nil
-        end
-        curr = 0
+        end))
       end
     end,
     Tooltip = 'Blurs the camera proportional to movement',
