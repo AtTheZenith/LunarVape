@@ -4,6 +4,7 @@ local registry = {
   ['12011959048'] = 'Bridge Duels Match',
   ['131465939650733'] = 'FRONTLINES',
   ['123804558118054'] = 'FRONTLINES',
+  ['12998806177'] = 'Killstreak',
   ['13246639586'] = 'Skywars Duels',
   ['14191889582'] = 'Bridge Duels Chaos Bridge',
   ['14662411059'] = 'Bridge Duels Boxing',

@@ -4,6 +4,7 @@
 
 local registry = {
   ['11630038968'] = 'Bridge Duels',
+  ['12998806177'] = 'Killstreak',
   ['6872274481'] = 'Bedwars Match',
 }
 
