@@ -7820,29 +7820,39 @@ run(function()
   --[[
     Grabbing an accurate count of the current framerate
     Source: https://devforum.roblox.com/t/get-client-FPS-trough-a-script/282631
-  ]]
+  ]] -- 💀 are you sped xylex?
   local FPS
+  local conn
   local label
 
   FPS = LunarVape.Legit:CreateModule {
     Name = 'FPS',
     Function = function(callback)
       if callback then
-        local frames = {}
-        local startClock = os.clock()
-        local updateTick = tick()
-        FPS:Clean(runService.Heartbeat:Connect(function()
-          local updateClock = os.clock()
-          for i = #frames, 1, -1 do
-            frames[i + 1] = frames[i] >= updateClock - 1 and frames[i] or nil
-          end
-          frames[1] = updateClock
-          if updateTick < tick() then
-            updateTick = tick() + 1
-            label.Text = math.floor(os.clock() - startClock >= 1 and #frames or #frames / (os.clock() - startClock))
-              .. ' FPS'
-          end
-        end))
+        -- local frames = {}
+        -- local startClock = os.clock()
+        -- local updateTick = tick()
+        -- FPS:Clean(runService.Heartbeat:Connect(function()
+        --   local updateClock = os.clock()
+        --   for i = #frames, 1, -1 do
+        --     frames[i + 1] = frames[i] >= updateClock - 1 and frames[i] or nil
+        --   end
+        --   frames[1] = updateClock
+        --   if updateTick < tick() then
+        --     updateTick = tick() + 1
+        --     label.Text = math.floor(os.clock() - startClock >= 1 and #frames or #frames / (os.clock() - startClock))
+        --       .. ' FPS'
+        --   end
+        -- end))
+        conn = runService.RenderStepped:Connect(function(d)
+          local fps = math.floor(1 / d)
+          label.Text = fps .. ' FPS'
+        end)
+      else
+        if conn then
+          conn:Disconnect()
+          conn = nil
+        end
       end
     end,
     Size = UDim2.fromOffset(100, 41),
@@ -8135,7 +8145,7 @@ run(function()
         repeat
           label.Text = math.floor(tonumber(game:GetService('Stats'):FindFirstChild('PerformanceStats').Ping:GetValue()))
             .. ' ms'
-          task.wait(1)
+          task.wait(0.2)
         until not Ping.Enabled
       end
     end,

@@ -19,9 +19,13 @@ local mainapi = {
   Scale = { Value = 1 },
   ThreadFix = setthreadidentity and getthreadidentity and true or false,
   ToggleNotifications = {},
-  Version = 'v2.5.3',
+  Version = 'v2.5.4',
   Windows = {},
 }
+
+if identifyexecutor() == 'Velocity' then
+  mainapi.ThreadFix = false
+end
 
 local cloneref = cloneref or function(obj)
   return obj

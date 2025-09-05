@@ -7477,23 +7477,32 @@ run(function()
 end)
 
 run(function()
+  if not LunarVape.ThreadFix then return end
+
   local texturepack = {Enabled = false}
   local packDropdown = {Value = "Melo Pack"}
 
-  local ogpackloader = game:GetObjects("rbxassetid://14027120450")
-  local ogtxtpack = ogpackloader[1]
-  ogtxtpack.Name = "OG Pack"
-  ogtxtpack.Parent = replicatedStorage
-  task.wait()
-  local melopackloader = game:GetObjects("rbxassetid://14774202839")
-  local melotxtpack = melopackloader[1]
-  melotxtpack.Name = "Melo's Pack"
-  melotxtpack.Parent = replicatedStorage
-  task.wait()
-  local azzapackloader = game:GetObjects("rbxassetid://14803122185")
-  local azzatxtpack = azzapackloader[1]
-  azzatxtpack.Name = "4zze's Pack"
-  azzatxtpack.Parent = replicatedStorage
+  local ogtxtpack, melotxtpack, azzatxtpack
+  if LunarVape.ThreadFix then
+    local old = getthreadidentity()
+    setthreadidentity(2)
+    local ogpackloader = game:GetObjects("rbxassetid://14027120450")
+    ogtxtpack = ogpackloader[1]
+    ogtxtpack.Name = "OG Pack"
+    ogtxtpack.Parent = replicatedStorage
+    task.wait()
+    local melopackloader = game:GetObjects("rbxassetid://14774202839")
+    melotxtpack = melopackloader[1]
+    melotxtpack.Name = "Melo's Pack"
+    melotxtpack.Parent = replicatedStorage
+    task.wait()
+    local azzapackloader = game:GetObjects("rbxassetid://14803122185")
+    azzatxtpack = azzapackloader[1]
+    azzatxtpack.Name = "4zze's Pack"
+    azzatxtpack.Parent = replicatedStorage
+    setthreadidentity(old)
+  end
+
   local viewmodelCon
   local textures = {
     ["OG Pack"] = ogtxtpack,
