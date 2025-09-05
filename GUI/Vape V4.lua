@@ -5605,7 +5605,7 @@ function mainapi:Load(skipgui, profile)
     guidata = loadJson('Lunar Vape/Profiles/' .. game.GameId .. ' GUI Settings.txt')
     if not guidata then
       guidata = { Categories = {} }
-      self:CreateNotification('Lunar Vape', 'Failed to load GUI settings.', 10, 'alert')
+      self:CreateNotification('Lunar Vape', 'Failed to load GUI settings.', 10, 'Alert')
       savecheck = false
     end
 
@@ -5658,7 +5658,7 @@ function mainapi:Load(skipgui, profile)
     local savedata = loadJson('Lunar Vape/Profiles/' .. self.Profile .. ' ' .. self.Place .. '.txt')
     if not savedata then
       savedata = { Categories = {}, Modules = {}, Legit = {} }
-      self:CreateNotification('Lunar Vape', 'Failed to load ' .. self.Profile .. ' profile.', 10, 'alert')
+      self:CreateNotification('Lunar Vape', 'Failed to load ' .. self.Profile .. ' profile.', 10, 'Alert')
       savecheck = false
     end
 

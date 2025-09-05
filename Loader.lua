@@ -70,7 +70,7 @@ pcall(function()
       end
       
       getgenv().LunarVape:CreateNotification(
-        'Lunar Vape Error', m, 5, 'alert'
+        'Lunar Vape Error', m, 5, 'Alert'
       )
     end
   end)
