@@ -5207,12 +5207,12 @@ run(function()
     Placeholder = 'player (userid)'
   })
   
-  task.spawn(function()
-    repeat task.wait(1) until LunarVape.Loaded or LunarVape.Loaded == nil
-    if LunarVape.Loaded and not StaffDetector.Enabled then
-      StaffDetector:Toggle()
-    end
-  end)
+  -- task.spawn(function()
+  --   repeat task.wait(1) until LunarVape.Loaded or LunarVape.Loaded == nil
+  --   if LunarVape.Loaded and not StaffDetector.Enabled then
+  --     StaffDetector:Toggle()
+  --   end
+  -- end)
 end)
   
 run(function()

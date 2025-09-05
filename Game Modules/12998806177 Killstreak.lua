@@ -1,3 +1,9 @@
+--[[Credits to stav (@._stav)
+  and sus (@yoo222aaa3_31)
+  for the custom module.
+  Yes, stav gave me permission to use it.
+]]
+
 local run = function(blacklist, func)
   if type(blacklist) == 'function' then
     blacklist()
@@ -46,7 +52,6 @@ end
 -- getlib is stupid but i need to help delta users
 local entitylib = getlib('entity', {})
 local targetinfo = getlib('targetinfo', {})
-local prediction = getlib('prediction', {})
 
 local function notify(title, text, duration, type)
   if not LunarVape then
@@ -85,6 +90,7 @@ end
 local Killaura
 local AutoToxicName
 run(function()
+  local ClickSpeed
   local Mode
   local Max
   local AttackRange
@@ -106,7 +112,7 @@ run(function()
     Name = 'Killaura',
     Function = function(callback)
       if callback then
-        repeat
+        Killaura:Clean(runService.Heartbeat:Connect(function()
           local attacked, args = {}, {}
           local plrs = entitylib.AllPosition {
             Range = SwingRange.Value,
@@ -184,7 +190,7 @@ run(function()
                 AutoToxicName = v.Player.Name
 
                 if Mode.Value == 'Mouse' then
-                  AttackDelay = tick() + 0.11
+                  AttackDelay = tick() + ClickSpeed.GetRandomValue()
                   virtualinputService:SendMouseButtonEvent(
                     gameCamera.ViewportSize.X / 2,
                     gameCamera.ViewportSize.Y / 2,
@@ -216,7 +222,7 @@ run(function()
             end
 
             if AttackDelay < tick() and Mode.Value == 'Remote' then
-              AttackDelay = tick() + 0.17
+              AttackDelay = tick() + (1 / ClickSpeed.GetRandomValue())
               if next(args) then
                 replicatedStorage.Remotes.Hit:FireServer(args)
                 args = {}
@@ -236,9 +242,7 @@ run(function()
             v.Position = attacked[i] and attacked[i].Entity.RootPart.Position or Vector3.new(9e9, 9e9, 9e9)
             v.Parent = attacked[i] and gameCamera or nil
           end
-
-          task.wait()
-        until not Killaura.Enabled
+        end))
       else
         for _, v in Boxes do
           v.Adornee = nil
@@ -266,6 +270,13 @@ run(function()
       LunarVape:UpdateTextGUI()
     end,
     Tooltip = 'Mouse - Simulates a mouse click\nRemote - Sends a RemoteEvent to the server',
+  }
+  ClickSpeed = Killaura:CreateTwoSlider {
+    Name = 'Attacks per Second',
+    Min = 1,
+    Max = 20,
+    DefaultMin = 5,
+    DefaultMax = 5,
   }
   SwingRange = Killaura:CreateSlider {
     Name = 'Swing range',
@@ -844,7 +855,7 @@ run(function()
             return
           end
 
-          sendMessage('Death', AutoToxicName, 'kool.aid ALWAYS comes back stronger <obj>')
+          sendMessage('Death', AutoToxicName, 'nice p2w kit <obj>')
           task.delay(0.05, function()
             AutoToxicName = 'self'
           end)
