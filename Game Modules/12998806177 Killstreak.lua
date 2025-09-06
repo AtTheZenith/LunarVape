@@ -214,7 +214,7 @@ run(function()
 
                   args[v.Player.Name] = {
                     Victim = v.Player,
-                    Vector = entitylib.character.RootPart.CFrame.LookVector,
+                    Vector = v.RootPart.Position - entitylib.character.RootPart.Position,
                     --Vector = Vector3.new(0, 0, -1)
                   }
                 end

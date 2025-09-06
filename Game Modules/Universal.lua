@@ -7808,10 +7808,6 @@ run(function()
 end)
 
 run(function()
-  --[[
-    Grabbing an accurate count of the current framerate
-    Source: https://devforum.roblox.com/t/get-client-FPS-trough-a-script/282631
-  ]] -- 💀 are you sped xylex?
   local FPS
   local label
 
@@ -7819,24 +7815,16 @@ run(function()
     Name = 'FPS',
     Function = function(callback)
       if callback then
-        -- local frames = {}
-        -- local startClock = os.clock()
-        -- local updateTick = tick()
-        -- FPS:Clean(runService.Heartbeat:Connect(function()
-        --   local updateClock = os.clock()
-        --   for i = #frames, 1, -1 do
-        --     frames[i + 1] = frames[i] >= updateClock - 1 and frames[i] or nil
-        --   end
-        --   frames[1] = updateClock
-        --   if updateTick < tick() then
-        --     updateTick = tick() + 1
-        --     label.Text = math.floor(os.clock() - startClock >= 1 and #frames or #frames / (os.clock() - startClock))
-        --       .. ' FPS'
-        --   end
-        -- end))
-        FPS:Clean(runService.RenderStepped:Connect(function(d)
-          local fps = math.floor(1 / d)
-          label.Text = fps .. ' FPS'
+        local frames = {}
+        FPS:Clean(runService.RenderStepped:Connect(function()
+            local now = tick()
+            table.insert(frames, now)
+
+            while frames[1] < now - 1 do
+                table.remove(frames, 1)
+            end
+
+            label.Text = tostring(#frames) .. " FPS"
         end))
       end
     end,
