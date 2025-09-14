@@ -535,7 +535,7 @@ run(function()
             end
           end
 
-          task.wait()
+          runService.Heartbeat:Wait()
         until not AutoFarm.Enabled
       end
     end,
