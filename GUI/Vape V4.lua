@@ -23,8 +23,10 @@ local mainapi = {
   Windows = {},
 }
 
-if identifyexecutor() == 'Velocity' then
-  mainapi.ThreadFix = false
+if identifyexecutor then
+  if table.find({ 'Velocity', 'Zenith' }, (identifyexecutor())) then
+    mainapi.ThreadFix = false
+  end
 end
 
 local cloneref = cloneref or function(obj)
