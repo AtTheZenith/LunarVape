@@ -472,6 +472,79 @@ run(function()
 end)
 
 run(function()
+  local AutoFarm
+  local Targets
+
+  AutoFarm = LunarVape.Categories.Blatant:CreateModule {
+    Name = 'AutoFarm',
+    Function = function(callback)
+      if callback then
+        if not Killaura.Enabled then
+          task.defer(function()
+            AutoFarm:Toggle()
+          end)
+          notify('AutoFarm', 'Enable Killaura to use AutoFarm.', 5)
+          return
+        end
+
+        repeat
+          if not Killaura.Enabled then
+            task.defer(function()
+              AutoFarm:Toggle()
+            end)
+            notify('AutoFarm', 'Enable Killaura to use AutoFarm.', 5)
+            return
+          end
+
+          local plrs = entitylib.AllPosition {
+            Range = 500,
+            Wallcheck = Targets.Walls.Enabled,
+            Part = 'RootPart',
+            Players = Targets.Players.Enabled,
+            NPCs = Targets.NPCs.Enabled,
+            Limit = 1,
+          }
+
+          local selectedPlayer
+          if #plrs > 0 and entitylib.isAlive then
+            -- check if current player is still attackable
+            if selectedPlayer then
+              if selectedPlayer.Humanoid.Health <= 0 or selectedPlayer.Player.SafeZone.Value == true then
+                selectedPlayer = nil
+              end
+            end
+
+            -- find new player
+            if not selectedPlayer then
+              for _, v in plrs do
+                if v.Player == lplr then
+                  continue
+                end
+                if v.Player.SafeZone.Value == true then
+                  continue
+                end
+                if not selectedPlayer or v.Humanoid.Health < selectedPlayer.Humanoid.Health then
+                  selectedPlayer = v
+                end
+              end
+            end
+
+            -- teleport above the player
+            if selectedPlayer then
+              entitylib.character.RootPart.CFrame = selectedPlayer.RootPart.CFrame + Vector3.new(0, 5, 0)
+            end
+          end
+
+          task.wait()
+        until not AutoFarm.Enabled
+      end
+    end,
+    Tooltip = 'Automatically attacks the lowest health player.',
+  }
+  Targets = AutoFarm:CreateTargets { Players = true }
+end)
+
+run(function()
   local AutoKit
   local Toggles = {}
 
