@@ -24,7 +24,7 @@ local mainapi = {
 }
 
 if identifyexecutor then
-  if table.find({ 'Velocity', 'Zenith' }, (identifyexecutor())) then
+  if table.find({ 'Velocity', 'Zenith', 'Volcano' }, (identifyexecutor())) then
     mainapi.ThreadFix = false
   end
 end
