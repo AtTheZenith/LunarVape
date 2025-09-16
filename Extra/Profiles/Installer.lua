@@ -19,8 +19,8 @@ local GAME_ID = tostring(LunarVape.Place)
 
 for _, v in next, { 'Blatant', 'Closet' } do
   str = string.format('Lunar Vape/Extra/Profiles/%s/%s', registry[tostring(getgenv().LunarVape.Place)], v)
-  if not isfolder(string) then
-    makefolder(string)
+  if not isfolder(str) then
+    makefolder(str)
   end
 end
 
