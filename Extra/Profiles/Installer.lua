@@ -8,19 +8,32 @@ local registry = {
   ['6872274481'] = 'Bedwars Match',
 }
 
-while not getgenv().LunarVape do task.wait() end
+while not getgenv().LunarVape do
+  task.wait()
+end
 local LunarVape = getgenv().LunarVape
-if not registry[tostring(LunarVape.Place)] then return end
+if not registry[tostring(LunarVape.Place)] then
+  return
+end
 local GAME_ID = tostring(LunarVape.Place)
+
+for _, v in next, { 'Blatant', 'Closet' } do
+  str = string.format('Lunar Vape/Extra/Profiles/%s/%s', registry[tostring(getgenv().LunarVape.Place)], v)
+  if not isfolder(string) then
+    makefolder(string)
+  end
+end
 
 local function downloadFile(path, func)
   if not isfile(path) and not getgenv().LunarVapeDeveloper then
     local suc, res = pcall(function()
       return game:HttpGet(
-        ('https://raw.githubusercontent.com/AtTheZenith/LunarVape/'
+        (
+          'https://raw.githubusercontent.com/AtTheZenith/LunarVape/'
           .. (isfile 'Lunar Vape/Profiles/commit.txt' and readfile 'Lunar Vape/Profiles/commit.txt' or 'main')
           .. '/'
-          .. (string.gsub(path, 'Lunar Vape/', ''))):gsub(' ', '%%20'),
+          .. (string.gsub(path, 'Lunar Vape/', ''))
+        ):gsub(' ', '%%20'),
         true
       )
     end)
@@ -38,15 +51,23 @@ local function downloadFile(path, func)
 end
 
 local Dir = string.format('Lunar Vape/Extra/Profiles/%s', registry[GAME_ID])
-if not isfolder(Dir) then makefolder(Dir) end
+if not isfolder(Dir) then
+  makefolder(Dir)
+end
 
 local Files = loadstring(downloadFile(Dir .. '/Files.lua'))()
-if not isfolder('Lunar Vape/Profiles') then makefolder('Lunar Vape/Profiles') end
+if not isfolder 'Lunar Vape/Profiles' then
+  makefolder 'Lunar Vape/Profiles'
+end
 if Files then
-	for _, File in Files do
-		if isfile('Lunar Vape/Profiles/' .. File) then continue end
-		local data = downloadFile(string.format('Lunar Vape/Extra/Profiles/%s/%s', registry[GAME_ID], File))
-		if not data or data == '' then continue end
-		writefile('Lunar Vape/Profiles/' .. File, data)
-	end
+  for _, File in Files do
+    if isfile('Lunar Vape/Profiles/' .. File) then
+      continue
+    end
+    local data = downloadFile(string.format('Lunar Vape/Extra/Profiles/%s/%s', registry[GAME_ID], File))
+    if not data or data == '' then
+      continue
+    end
+    writefile('Lunar Vape/Profiles/' .. File, data)
+  end
 end
