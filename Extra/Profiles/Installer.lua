@@ -62,14 +62,14 @@ if not isfolder 'Lunar Vape/Profiles' then
 end
 if Files then
   for _, File in Files do
-    if isfile('Lunar Vape/Profiles/' .. File) then
+    local FileName = File:match '([^/]+)$'
+    if isfile('Lunar Vape/Profiles/' .. FileName) then
       continue
     end
     local data = downloadFile(string.format('Lunar Vape/Extra/Profiles/%s/%s', registry[GAME_ID], File))
     if not data or data == '' then
       continue
     end
-    local FileName = File:match '([^/]+)$'
     writefile('Lunar Vape/Profiles/' .. FileName, data)
   end
 end
