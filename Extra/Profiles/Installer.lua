@@ -17,13 +17,6 @@ if not registry[tostring(LunarVape.Place)] then
 end
 local GAME_ID = tostring(LunarVape.Place)
 
-for _, v in next, { 'Blatant', 'Closet' } do
-  str = string.format('Lunar Vape/Extra/Profiles/%s/%s', registry[tostring(getgenv().LunarVape.Place)], v)
-  if not isfolder(str) then
-    makefolder(str)
-  end
-end
-
 local function downloadFile(path, func)
   if not isfile(path) and not getgenv().LunarVapeDeveloper then
     local suc, res = pcall(function()
@@ -50,11 +43,19 @@ local function downloadFile(path, func)
   return (func or readfile)(path)
 end
 
+-- === Make folders ===
 local Dir = string.format('Lunar Vape/Extra/Profiles/%s', registry[GAME_ID])
 if not isfolder(Dir) then
   makefolder(Dir)
 end
+for _, v in next, { 'Blatant', 'Closet' } do
+  str = string.format('Lunar Vape/Extra/Profiles/%s/%s', registry[GAME_ID], v)
+  if not isfolder(str) then
+    makefolder(str)
+  end
+end
 
+-- === Download files ===
 local Files = loadstring(downloadFile(Dir .. '/Files.lua'))()
 if not isfolder 'Lunar Vape/Profiles' then
   makefolder 'Lunar Vape/Profiles'
@@ -68,6 +69,7 @@ if Files then
     if not data or data == '' then
       continue
     end
-    writefile('Lunar Vape/Profiles/' .. File, data)
+    local FileName = File:match '([^/]+)$'
+    writefile('Lunar Vape/Profiles/' .. FileName, data)
   end
 end
