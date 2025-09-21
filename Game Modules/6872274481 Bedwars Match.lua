@@ -358,7 +358,9 @@ local function switchItem(tool, delayTime)
   local check = lplr.Character and lplr.Character:FindFirstChild('HandInvItem') or nil
   if check and check.Value ~= tool and tool.Parent ~= nil then
     task.spawn(function()
-      bedwars.Client:Get(remotes.EquipItem):CallServerAsync({hand = tool})
+      if remotes.EquipItem then
+        bedwars.Client:Get(remotes.EquipItem):CallServerAsync({hand = tool})
+      end
     end)
     check.Value = tool
     if delayTime > 0 then
@@ -733,8 +735,11 @@ run(function()
   })
 
   local oldproto = debug.getproto
-  local function newproto(func, num)
+  local function newproto(func, num, extrainfo)
     local suc, res = pcall(function() return oldproto(func, num) end)
+    if not suc then
+      notif('Lunar Vape', 'Failed to get proto, check error below.\n'..tostring(suc)..' | '..tostring(res), 10, 'Alert')
+    end
     return suc and res or nil
   end
 
