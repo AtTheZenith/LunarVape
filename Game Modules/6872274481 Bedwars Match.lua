@@ -1666,14 +1666,14 @@ run(function()
         repeat task.wait() until store.matchState ~= 0 or (not AntiFall.Enabled)
         if not AntiFall.Enabled then return end
 
-        local pos, debounce = getLowGround(), tick()
-        if pos ~= math.huge then
+        local ypos, debounce = getLowGround(), tick()
+        if ypos ~= math.huge then
           AntiFallPart = Instance.new('Part')
           AntiFallPart.Size = Vector3.new(10000, 1, 10000)
           AntiFallPart.Transparency = 1 - Color.Opacity
           AntiFallPart.Material = Enum.Material[Material.Value]
           AntiFallPart.Color = Color3.fromHSV(Color.Hue, Color.Sat, Color.Value)
-          AntiFallPart.Position = Vector3.new(0, pos - 2, 0)
+          AntiFallPart.Position = Vector3.new(0, ypos - 2, 0)
           AntiFallPart.CanCollide = Mode.Value == 'Collide'
           AntiFallPart.Anchored = true
           AntiFallPart.CanQuery = false
@@ -1689,7 +1689,10 @@ run(function()
                   local connection
                   connection = runService.PreSimulation:Connect(function()
                     if LunarVape.Modules.Fly.Enabled or LunarVape.Modules.LongJump.Enabled then
-                      connection:Disconnect()
+                      if connection then 
+                        connection:Disconnect()
+                        connection = nil
+                      end
                       AntiFallDirection = nil
                       return
                     end
@@ -1707,7 +1710,7 @@ run(function()
                         for _ = 1, 10 do
                           local dpos = roundPos(ray.Position + ray.Normal * 1.5) + Vector3.new(0, 3, 0)
                           if not getPlacedBlock(dpos) then
-                            top = Vector3.new(top.X, pos.Y, top.Z)
+                            top = Vector3.new(top.X, ypos, top.Z) -- ypos is the number not the vector3 gj xylex
                             break
                           end
                         end
