@@ -19,7 +19,7 @@ local mainapi = {
   Scale = { Value = 1 },
   ThreadFix = setthreadidentity and getthreadidentity and true or false,
   ToggleNotifications = {},
-  Version = 'v2.6.4',
+  Version = 'v2.6.5',
   Windows = {},
 }
 

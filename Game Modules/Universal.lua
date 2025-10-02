@@ -5895,7 +5895,63 @@ run(function()
   }
 end)
 
-run({ 'Solara', 'NX' }, function()
+run(function()
+  -- Credits to IY for this module.
+  local AnimationChanger
+  local IDBox
+
+  local function anim2track(asset_id)
+    local objs = game:GetObjects(asset_id)
+    for i = 1, #objs do
+        if objs[i]:IsA("Animation") then
+            return objs[i].AnimationId
+        end
+    end
+    return asset_id
+  end
+
+  local function setAnimation(char, animid)
+    if not tonumber(animid) then
+      return
+    end
+    if not animid:find("rbxassetid://") then
+      animid = "rbxassetid://" .. animid
+    end
+    animid = anim2track(animid)
+    local animation = Instance.new("Animation")
+    animation.AnimationId = animid
+    local anim = entitylib.character.Humanoid.Animator:LoadAnimation(animation)
+    anim.Priority = Enum.AnimationPriority.Movement
+    anim:Play()
+    return anim
+  end
+
+  AnimationChanger = LunarVape.Categories.Utility:CreateModule {
+    Name = 'AnimationChanger',
+    HoverText = 'Credits to IY for this module.',
+    Function = function(callback)
+      if callback then
+        -- get original animation id
+        if entitylib.isAlive then
+          setAnimation(entitylib.character, IDBox.Value)
+        end
+      end
+    end,
+  }
+
+  IDBox = AnimationChanger:CreateTextBox {
+    Name = 'Animation',
+    Placeholder = 'Animation (number only)',
+    Function = function(enter)
+      if enter and AnimationChanger.Enabled then
+        AnimationChanger:Toggle()
+        AnimationChanger:Toggle()
+      end
+    end,
+  }
+end)
+
+run({ 'Solara' }, function()
   local AnimationPlayer
   local IDBox
   local Priority
