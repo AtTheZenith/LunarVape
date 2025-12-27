@@ -19,7 +19,7 @@ local mainapi = {
   Scale = { Value = 1 },
   ThreadFix = setthreadidentity and getthreadidentity and true or false,
   ToggleNotifications = {},
-  Version = 'v2.6.5',
+  Version = 'v2.7.0',
   Windows = {},
 }
 
@@ -57,8 +57,8 @@ local tween = {
   tweenstwo = {},
 }
 local uipallet = {
-  Main = Color3.fromRGB(25, 23, 51),
-  Text = Color3.fromRGB(235, 225, 255),
+  Main = Color3.fromRGB(235, 225, 255),
+  Text = Color3.fromRGB(25, 23, 51),
   Font = Font.fromEnum(Enum.Font.Gotham),
   FontSemiBold = Font.fromEnum(Enum.Font.Gotham, Enum.FontWeight.SemiBold),
   Tween = TweenInfo.new(0.15, Enum.EasingStyle.Circular),
@@ -6315,30 +6315,30 @@ scaleslider = guipane:CreateSlider {
   Darker = true,
   Visible = false,
 }
-guipane:CreateDropdown {
-  Name = 'GUI Theme',
-  List = inputService.TouchEnabled and { 'Vape V4', 'Vape V3' } or { 'Vape V4', 'Vape V3', 'Rise' },
-  Function = function(val, mouse)
-    if mouse then
-      writefile('Lunar Vape/Profiles/GUI.txt', val)
-      getgenv().LunarVapereload = true
-      if getgenv().LunarVapeDeveloper then
-        loadstring(readfile 'Lunar Vape/Loader.lua', 'Lunar Vape/Loader.lua')()
-      else
-        loadstring(
-          game:HttpGet(
-            'https://raw.githubusercontent.com/AtTheZenith/LunarVape/'
-              .. readfile 'Lunar Vape/Profiles/commit.txt'
-              .. '/Loader.lua',
-            true
-          ),
-          'Lunar Vape/Loader.lua'
-        )()
-      end
-    end
-  end,
-  Tooltip = 'new - The newest LunarVape theme to since v4.05\nold - The LunarVape theme pre v4.05\nrise - Rise 6.0',
-}
+-- guipane:CreateDropdown {
+--   Name = 'GUI Theme',
+--   List = inputService.TouchEnabled and { 'Vape V4', 'Vape V3' } or { 'Vape V4', 'Vape V3', 'Rise' },
+--   Function = function(val, mouse)
+--     if mouse then
+--       writefile('Lunar Vape/Profiles/GUI.txt', val)
+--       getgenv().LunarVapereload = true
+--       if getgenv().LunarVapeDeveloper then
+--         loadstring(readfile 'Lunar Vape/Loader.lua', 'Lunar Vape/Loader.lua')()
+--       else
+--         loadstring(
+--           game:HttpGet(
+--             'https://raw.githubusercontent.com/AtTheZenith/LunarVape/'
+--               .. readfile 'Lunar Vape/Profiles/commit.txt'
+--               .. '/Loader.lua',
+--             true
+--           ),
+--           'Lunar Vape/Loader.lua'
+--         )()
+--       end
+--     end
+--   end,
+--   Tooltip = 'new - The newest LunarVape theme to since v4.05\nold - The LunarVape theme pre v4.05\nrise - Rise 6.0',
+-- }
 mainapi.RainbowMode = guipane:CreateDropdown {
   Name = 'Rainbow Mode',
   List = { 'Normal', 'Gradient', 'Retro' },
