@@ -28,7 +28,7 @@ local coreGui = cloneref(game:GetService('CoreGui'))
 local starterGui = cloneref(game:GetService('StarterGui'))
 local logService = cloneref(game:GetService('LogService'))
 
-local isnetworkowner = isnetworkowner or function(): boolean return true end
+local isnetworkowner = not table.find({'Hydrogen'}, (identifyexecutor())) and isnetworkowner or function(): boolean return true end
 local assetfunction = getcustomasset
 local clonefunction = clonefunction or function<T>(T): T return T end
 
@@ -6349,7 +6349,7 @@ run(function()
   })
 end)
   
-run(function()
+run({'Hydrogen'}, function()
   local AutoHotbar
   local Mode
   local Clear
@@ -7480,7 +7480,7 @@ run(function()
   })
 end)
 
-run(function()
+run({'Hydrogen'}, function()
   if not LunarVape.ThreadFix then return end
 
   local TexturePack
