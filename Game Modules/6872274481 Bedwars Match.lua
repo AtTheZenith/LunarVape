@@ -2062,10 +2062,9 @@ run(function()
 	local Killaura
 	local Targets
 	local Sort
-  local CPS
+	local CPS
 	local SwingRange
 	local AttackRange
-	local ChargeTime
 	local UpdateRate
 	local AngleSlider
 	local MaxTargets
@@ -2338,13 +2337,13 @@ run(function()
 			table.insert(methods, i)
 		end
 	end
-  CPS = Killaura:CreateTwoSlider {
-    Name = 'Attacks per Second',
-    Min = 1,
-    Max = 20,
-    DefaultMin = 12,
-    DefaultMax = 12,
-  }
+	CPS = Killaura:CreateTwoSlider {
+		Name = 'Attacks per Second',
+		Min = 1,
+		Max = 20,
+		DefaultMin = 12,
+		DefaultMax = 12,
+	}
 	SwingRange = Killaura:CreateSlider({
 		Name = 'Swing range',
 		Min = 1,
@@ -2363,13 +2362,6 @@ run(function()
 			return val == 1 and 'stud' or 'studs'
 		end
 	})
-	-- ChargeTime = Killaura:CreateSlider({
-	-- 	Name = 'Swing time',
-	-- 	Min = 0,
-	-- 	Max = 0.5,
-	-- 	Default = 0.42,
-	-- 	Decimal = 100
-	-- })
 	AngleSlider = Killaura:CreateSlider({
 		Name = 'Max angle',
 		Min = 1,
