@@ -757,7 +757,7 @@ run(function()
     DragonEndFly = newproto(Knit.Controllers.VoidDragonController.flapWings, 1),
     DragonFly = Knit.Controllers.VoidDragonController.flapWings,
     DropItem = Knit.Controllers.ItemDropController.dropItemInHand,
-    EquipItem = newproto(require(replicatedStorage.TS.entity.entities['inventory-entity']).InventoryEntity.equipItem, 3),
+    EquipItem = require(replicatedStorage.TS.entity.entities['inventory-entity']).InventoryEntity.equipItem,
     FireProjectile = debug.getupvalue(Knit.Controllers.ProjectileController.launchProjectileWithValues, 2),
     GuitarHeal = Knit.Controllers.GuitarController.performHeal,
     HannahKill = newproto(Knit.Controllers.HannahController.registerExecuteInteractions, 1),
@@ -2062,6 +2062,7 @@ run(function()
 	local Killaura
 	local Targets
 	local Sort
+  local CPS
 	local SwingRange
 	local AttackRange
 	local ChargeTime
@@ -2337,6 +2338,13 @@ run(function()
 			table.insert(methods, i)
 		end
 	end
+  CPS = Killaura:CreateTwoSlider {
+    Name = 'Attacks per Second',
+    Min = 1,
+    Max = 20,
+    DefaultMin = 12,
+    DefaultMax = 12,
+  }
 	SwingRange = Killaura:CreateSlider({
 		Name = 'Swing range',
 		Min = 1,
@@ -2355,13 +2363,13 @@ run(function()
 			return val == 1 and 'stud' or 'studs'
 		end
 	})
-	ChargeTime = Killaura:CreateSlider({
-		Name = 'Swing time',
-		Min = 0,
-		Max = 0.5,
-		Default = 0.42,
-		Decimal = 100
-	})
+	-- ChargeTime = Killaura:CreateSlider({
+	-- 	Name = 'Swing time',
+	-- 	Min = 0,
+	-- 	Max = 0.5,
+	-- 	Default = 0.42,
+	-- 	Decimal = 100
+	-- })
 	AngleSlider = Killaura:CreateSlider({
 		Name = 'Max angle',
 		Min = 1,
@@ -7480,7 +7488,7 @@ run(function()
   })
 end)
 
-run({'Hydrogen'}, function()
+run(function()
   if not LunarVape.ThreadFix then return end
 
   local TexturePack
