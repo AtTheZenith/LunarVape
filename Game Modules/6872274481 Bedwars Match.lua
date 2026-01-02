@@ -2209,6 +2209,7 @@ run(function()
 						})
 
 						if #plrs > 0 then
+              local swingTime = 1 / CPS:GetRandomValue()
 							switchItem(sword.tool, 0)
 							local selfpos = entitylib.character.RootPart.Position
 							local localfacing = entitylib.character.RootPart.CFrame.LookVector * Vector3.new(1, 0, 1)
@@ -2233,7 +2234,7 @@ run(function()
                       old = getthreadidentity()
                       setthreadidentity(2)
                     end
-										AnimDelay = tick() + (meta.sword.respectAttackSpeedForEffects and meta.sword.attackSpeed or math.max(1 / CPS:GetRandomValue(), 0.11))
+										AnimDelay = tick() + (meta.sword.respectAttackSpeedForEffects and meta.sword.attackSpeed or math.max(swingTime, 0.11))
 										bedwars.SwordController:playSwordEffect(meta, false)
 										if meta.displayName:find(' Scythe') then
 											bedwars.ScytheController:playLocalAnimation()
@@ -2246,7 +2247,7 @@ run(function()
 								end
 
 								if delta.Magnitude > AttackRange.Value then continue end
-								if delta.Magnitude < 14.4 and (tick() - swingCooldown) < math.max(1 / CPS:GetRandomValue(), 0.02) then continue end
+								if delta.Magnitude < 14.4 and (tick() - swingCooldown) < math.max(swingTime, 0.02) then continue end
 
 								local actualRoot = v.Character.PrimaryPart
 								if actualRoot then
@@ -2257,7 +2258,7 @@ run(function()
 									store.attackReach = (delta.Magnitude * 100) // 1 / 100
 									store.attackReachUpdate = tick() + 1
 
-									if delta.Magnitude < 14.4 and 1 / CPS:GetRandomValue() > 0.11 then
+									if delta.Magnitude < 14.4 and swingTime > 0.11 then
 										AnimDelay = tick()
 									end
 
@@ -2341,8 +2342,8 @@ run(function()
 		Name = 'Attacks per Second',
 		Min = 1,
 		Max = 20,
-		DefaultMin = 12,
-		DefaultMax = 12,
+		DefaultMin = 9,
+		DefaultMax = 9,
 	}
 	SwingRange = Killaura:CreateSlider({
 		Name = 'Swing range',
