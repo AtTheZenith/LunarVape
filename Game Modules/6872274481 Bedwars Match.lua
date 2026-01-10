@@ -28,7 +28,7 @@ local coreGui = cloneref(game:GetService('CoreGui'))
 local starterGui = cloneref(game:GetService('StarterGui'))
 local logService = cloneref(game:GetService('LogService'))
 
-local isnetworkowner = not table.find({'Hydrogen'}, (identifyexecutor())) and isnetworkowner or function(): boolean return true end
+local isnetworkowner = not table.find({ 'Hydrogen', 'Cryptic-Windows' }, (identifyexecutor())) and isnetworkowner or function(): boolean return true end
 local assetfunction = getcustomasset
 local clonefunction = clonefunction or function<T>(T): T return T end
 
