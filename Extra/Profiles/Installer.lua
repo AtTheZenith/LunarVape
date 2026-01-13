@@ -23,7 +23,7 @@ local function downloadFile(path, func)
       return game:HttpGet(
         (
           'https://raw.githubusercontent.com/AtTheZenith/LunarVape/'
-          .. (isfile 'Lunar Vape/Profiles/commit.txt' and readfile 'Lunar Vape/Profiles/commit.txt' or 'main')
+          .. (isfile 'Lunar Vape/Profiles/Commit.txt' and readfile 'Lunar Vape/Profiles/Commit.txt' or 'main')
           .. '/'
           .. (string.gsub(path, 'Lunar Vape/', ''))
         ):gsub(' ', '%%20'),

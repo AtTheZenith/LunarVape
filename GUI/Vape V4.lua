@@ -17,9 +17,9 @@ local mainapi = {
   RainbowUpdateSpeed = { Value = 60 },
   RainbowTable = {},
   Scale = { Value = 1 },
-  ThreadFix = setthreadidentity and getthreadidentity and true or false,
+  ThreadFix = getgenv().setthreadidentity and true or false,
   ToggleNotifications = {},
-  Version = 'v2.7.0',
+  Version = 'v2.7.1',
   Windows = {},
 }
 
@@ -323,7 +323,7 @@ local function downloadFile(path, func)
     local suc, res = pcall(function()
       return game:HttpGet(
         ('https://raw.githubusercontent.com/AtTheZenith/LunarVape/'
-          .. (isfile 'Lunar Vape/Profiles/commit.txt' and readfile 'Lunar Vape/Profiles/commit.txt' or 'main')
+          .. (isfile 'Lunar Vape/Profiles/Commit.txt' and readfile 'Lunar Vape/Profiles/Commit.txt' or 'main')
           .. '/'
           .. (string.gsub(path, 'Lunar Vape/', ''))):gsub(' ', '%%20'),
         true
@@ -6185,7 +6185,7 @@ general:CreateButton {
       loadstring(
         game:HttpGet(
           'https://raw.githubusercontent.com/AtTheZenith/LunarVape/'
-            .. readfile 'Lunar Vape/Profiles/commit.txt'
+            .. readfile 'Lunar Vape/Profiles/Commit.txt'
             .. '/Loader.lua',
           true
         ),
@@ -6212,7 +6212,7 @@ general:CreateButton {
       loadstring(
         game:HttpGet(
           'https://raw.githubusercontent.com/AtTheZenith/LunarVape/'
-            .. readfile 'Lunar Vape/Profiles/commit.txt'
+            .. readfile 'Lunar Vape/Profiles/Commit.txt'
             .. '/Loader.lua',
           true
         ),
@@ -6328,7 +6328,7 @@ scaleslider = guipane:CreateSlider {
 --         loadstring(
 --           game:HttpGet(
 --             'https://raw.githubusercontent.com/AtTheZenith/LunarVape/'
---               .. readfile 'Lunar Vape/Profiles/commit.txt'
+--               .. readfile 'Lunar Vape/Profiles/Commit.txt'
 --               .. '/Loader.lua',
 --             true
 --           ),
