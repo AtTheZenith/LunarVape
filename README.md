@@ -34,7 +34,7 @@ Half of the time its usually the scripting utility at fault, please make sure th
 3. Maintaing the same behavior across all usages of said functions.
 
 ### User Issues
-If its not the supposed utility at fault, please try some troubleshooting steps.
+If it's not the supposed utility at fault, please try some troubleshooting steps.
 1. Deleting the Lunar Vape folder in your executor's workspace (WITH THE GAME CLOSED).
 2. Making sure you have connection to [the main loadstring](https://raw.githubusercontent.com/AtTheZenith/LunarVape/main/Loader.lua).
 3. Ensuring no external script is conflicting with vape.
