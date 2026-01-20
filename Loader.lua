@@ -1,3 +1,7 @@
+if true then
+  cloneref(game:GetService 'Players').LocalPlayer:Kick("Lunar Vape is discontinued.\nDo not use exploits.")
+end
+
 pcall(function()
   local c = cloneref or function(v)
     return v
